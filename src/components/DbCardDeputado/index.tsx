@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import { Box, Button, Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-import type { Deputado } from '../../types';
+import type { Deputado } from '@/types';
 
 interface Props {
     deputado: Deputado;
