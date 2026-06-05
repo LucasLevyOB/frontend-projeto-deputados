@@ -1,0 +1,1 @@
+export type { Deputado, EstatisticasDeputado } from './Deputado';
