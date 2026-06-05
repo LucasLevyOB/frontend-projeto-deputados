@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import DbCardDeputado from '@/components/DbCardDeputado';
+import { DbCardDeputado } from '@/components/DbCardDeputado';
 
 import type { Deputado } from '@/types';
 

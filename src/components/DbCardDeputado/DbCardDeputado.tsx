@@ -1,8 +1,9 @@
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { Box, Button, Paper } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import StatItem from './StatItem';
 
 import type { Deputado } from '@/types';
 
@@ -10,39 +11,7 @@ interface Props {
     deputado: Deputado;
 }
 
-interface StatItemProps {
-    label: string;
-    value: string | number;
-    highlight?: boolean;
-}
-
-const StatItem = ({ label, value, highlight = false }: StatItemProps) => {
-    if (highlight) {
-        return (
-            <Paper elevation={0} variant="outlined" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: '16px', mr: 'auto', ml: 'auto' }}>
-                <Typography variant="h5">
-                    {value}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {label}
-                </Typography>
-            </Paper>
-        );
-    }
-
-    return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Typography variant="button">
-                {value}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {label}
-            </Typography>
-        </Box>
-    );
-};
-
-export default function DbCard({ deputado }: Props) {
+const DbCard = ({ deputado }: Props) => {
     return (
         <Card sx={{ maxWidth: 356, width: '100%' }}>
             <CardContent>
@@ -81,4 +50,6 @@ export default function DbCard({ deputado }: Props) {
             </CardActions>
         </Card>
     );
-}
+};
+
+export default DbCard;
