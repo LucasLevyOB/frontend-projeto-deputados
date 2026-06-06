@@ -50,7 +50,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const DbAppBar = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
         <Toolbar>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

@@ -2,7 +2,6 @@ import { Box } from '@mui/material';
 import { DbCardDeputado } from '@/components/DbCardDeputado';
 
 import type { Deputado } from '@/types';
-import DbAppBar from '@/components/DbAppBar/DbAppBar';
 
 export const Home = () => {
   const deputadoExemplo: Deputado = {
@@ -23,7 +22,6 @@ export const Home = () => {
 
   return (
     <Box>
-      <DbAppBar />
       <DbCardDeputado deputado={deputadoExemplo} />
     </Box>
   );
