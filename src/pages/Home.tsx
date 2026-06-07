@@ -1,28 +1,33 @@
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { DbCardDeputado } from '@/components/DbCardDeputado';
+import DepudadosAPI from '@/services/DepudadosAPI';
 
 import type { Deputado } from '@/types';
 
 export const Home = () => {
-  const deputadoExemplo: Deputado = {
-    "_id": 204536,
-    "nome": "Kim Kataguiri",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204536.jpg",
-    "estatisticas": {
-      "gastosDespesas": 570361.19,
-      "projetosDeLei": 230,
-      "totalProposicoes": 2151,
-      "scoreEficiencia": 172,
-      "custoPorProjetoLei": 2479.83126086956,
-      "custoPorProposicao": 265.160943747094
-    },
-    "siglaPartido": "MISSÃO",
-    "siglaUf": "SP"
+  const [deputados, setDeputados] = useState<Deputado[]>([]);
+
+  const fetchDeputados = async () => {
+    const api = new DepudadosAPI();
+    const response = await api.getDeputados();
+
+    setDeputados(response);
   };
 
+  useEffect(() => {
+    fetchDeputados();
+  }, []);
+
   return (
-    <Box>
-      <DbCardDeputado deputado={deputadoExemplo} />
+    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 4 }}>
+      {deputados.length === 0 ? (
+        <Box>Loading...</Box>
+      ) : (
+        deputados.map((deputado) => (
+          <DbCardDeputado key={deputado._id} deputado={deputado} />
+        ))
+      )}
     </Box>
   );
 };

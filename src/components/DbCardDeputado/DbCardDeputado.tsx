@@ -6,12 +6,18 @@ import Typography from '@mui/material/Typography';
 import StatItem from './StatItem';
 
 import type { Deputado } from '@/types';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     deputado: Deputado;
 }
 
 const DbCard = ({ deputado }: Props) => {
+    const navigate = useNavigate();
+    const handleVerDetalhes = () => {
+        navigate(`/deputado/${deputado._id}`);
+    };
+
     return (
         <Card sx={{ maxWidth: 356, width: '100%' }}>
             <CardContent>
@@ -46,7 +52,7 @@ const DbCard = ({ deputado }: Props) => {
                 </Box>
             </CardContent>
             <CardActions>
-                <Button size="small" sx={{ ml: 'auto' }}>Ver Detalhes</Button>
+                <Button size="small" sx={{ ml: 'auto' }} onClick={handleVerDetalhes}>Ver Detalhes</Button>
             </CardActions>
         </Card>
     );
