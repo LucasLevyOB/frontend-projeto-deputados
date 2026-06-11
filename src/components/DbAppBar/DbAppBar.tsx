@@ -1,4 +1,4 @@
-import { styled, alpha } from '@mui/material/styles';
+import { styled, alpha, type SxProps } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -47,9 +47,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const DbAppBar = () => {
+interface DbAppBarProps {
+  sx?: SxProps;
+}
+
+const DbAppBar = ({ sx }: DbAppBarProps) => {
   return (
-    <Box>
+    <Box sx={sx}>
       <AppBar position="static">
         <Toolbar>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -91,10 +95,20 @@ const DbAppBar = () => {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: 'flex', ml: 2 }}>
-            <Button variant='text' color='inherit' sx={{ display: { xs: 'none', sm: 'block' } }} href="/">
+            <Button
+              variant="text"
+              color="inherit"
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+              href="/"
+            >
               Home
             </Button>
-            <Button variant='text' color='inherit' sx={{ display: { xs: 'none', sm: 'block' } }} href="/">
+            <Button
+              variant="text"
+              color="inherit"
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+              href="/"
+            >
               Detalhamento
             </Button>
           </Box>

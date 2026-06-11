@@ -5,7 +5,7 @@ import DbAppBar from '@/components/DbAppBar/DbAppBar';
 export const RootLayout = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <DbAppBar />
+      <DbAppBar sx={{ position: 'sticky', top: 0, zIndex: 100 }} />
       <Box component="main" sx={{ p: 3 }}>
         <Outlet />
       </Box>
