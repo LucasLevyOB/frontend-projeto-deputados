@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import DepudadosAPI from '@/services/DepudadosAPI';
-import { BarChart } from '@mui/x-charts';
+import { BarChart, PieChart } from '@mui/x-charts';
 import { formatCurrency } from '@/utils';
 
 import type { SelectChangeEvent } from '@mui/material';
 import type { Deputado } from '@/types';
-import type { ResumoGastos } from '@/types/Deputado';
+import type { ResumoGastos, ResumoProposicoes } from '@/types/Deputado';
 
 const meses = [
   'Janeiro',
@@ -45,29 +45,42 @@ const formatDataset = (
   );
 };
 
+const formatDatasetProposicoes = (
+  resumoProposicoes: ResumoProposicoes[] | undefined,
+  ano: number
+): { pl: number; outras: number; mes: string }[] => {
+  if (!resumoProposicoes) return [];
+  return (
+    resumoProposicoes
+      .find((resumo) => resumo.ano === ano)
+      ?.meses.map(({ mes, projetosDeLei, outrasProposicoes }) => ({
+        pl: projetosDeLei,
+        outras: outrasProposicoes,
+        mes: meses[mes - 1],
+      })) || []
+  );
+};
+
+const formatDatasetTipos = (
+  resumoProposicoes: ResumoProposicoes[] | undefined,
+  ano: number
+): { id: number; value: number; label: string }[] => {
+  if (!resumoProposicoes) return [];
+  const tipos = resumoProposicoes.find((resumo) => resumo.ano === ano)?.tipos || [];
+  return tipos.map((t, index) => ({
+    id: index,
+    value: t.quantidade,
+    label: t.siglaTipo + ' - ' + t.descricaoTipo,
+  }));
+};
+
 export const DeputadoDetalhes = () => {
   const { id } = useParams<{ id: string }>();
   const [deputado, setDeputado] = useState<Deputado | null>(null);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [dataset, setDataset] = useState<{ gastos: number; mes: string }[]>([]);
-
-  const chartSetting = {
-    yAxis: [
-      {
-        label: 'Gastos',
-        width: 60,
-      },
-    ],
-    series: [
-      {
-        dataKey: 'gastos',
-        label: 'Gastos',
-        valueFormatter: (value: number) => `R$ ${value}`,
-      },
-    ],
-    height: 300,
-    margin: { left: 0 },
-  };
+  const [datasetProposicoes, setDatasetProposicoes] = useState<{ pl: number; outras: number; mes: string }[]>([]);
+  const [datasetTipos, setDatasetTipos] = useState<{ id: number; value: number; label: string }[]>([]);
 
   const fetchDeputado = async (id: number) => {
     const api = new DepudadosAPI();
@@ -75,6 +88,8 @@ export const DeputadoDetalhes = () => {
 
     setDeputado(response[0]);
     setDataset(formatDataset(response[0].resumoGastos, ano));
+    setDatasetProposicoes(formatDatasetProposicoes(response[0].resumoProposicoes, ano));
+    setDatasetTipos(formatDatasetTipos(response[0].resumoProposicoes, ano));
   };
 
   const handleChangeYear = (event: SelectChangeEvent<number>) => {
@@ -83,6 +98,10 @@ export const DeputadoDetalhes = () => {
 
     if (deputado?.resumoGastos) {
       setDataset(formatDataset(deputado.resumoGastos, newYear));
+    }
+    if (deputado?.resumoProposicoes) {
+      setDatasetProposicoes(formatDatasetProposicoes(deputado.resumoProposicoes, newYear));
+      setDatasetTipos(formatDatasetTipos(deputado.resumoProposicoes, newYear));
     }
   };
 
@@ -139,54 +158,96 @@ export const DeputadoDetalhes = () => {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex' }}>
-        <Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              gap: 4,
-              alignItems: 'start',
-            }}
-          >
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Typography variant="body1">Gastos Totais no Ano: </Typography>
-              <Typography variant="h5">
-                {getGastosTotaisAno(ano, deputado.resumoGastos)}
-              </Typography>
-            </Box>
-            <FormControl>
-              <InputLabel id="demo-simple-select-label">Ano</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={ano}
-                label="Ano"
-                onChange={handleChangeYear}
-              >
-                <MenuItem value={2026}>2026</MenuItem>
-                <MenuItem value={2025}>2025</MenuItem>
-                <MenuItem value={2024}>2024</MenuItem>
-                <MenuItem value={2023}>2023</MenuItem>
-              </Select>
-            </FormControl>
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '1200px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            gap: 4,
+            alignItems: 'start',
+            mb: 4,
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Typography variant="body1">Gastos Totais no Ano: </Typography>
+            <Typography variant="h5">
+              {getGastosTotaisAno(ano, deputado.resumoGastos)}
+            </Typography>
           </Box>
-          <BarChart
-            dataset={dataset}
-            xAxis={[
-              {
-                dataKey: 'mes',
-                tickPlacement: 'middle',
-                tickLabelPlacement: 'tick',
-              },
-            ]}
-            // yAxis={[{ label: 'Gastos', dataKey: 'gastos' }]}
-            series={[{ dataKey: 'gastos', label: 'Gastos' }]}
-            height={300}
-            width={600}
-            margin={{ left: 0 }}
-          />
+          <FormControl>
+            <InputLabel id="demo-simple-select-label">Ano</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={ano}
+              label="Ano"
+              onChange={handleChangeYear}
+            >
+              <MenuItem value={2026}>2026</MenuItem>
+              <MenuItem value={2025}>2025</MenuItem>
+              <MenuItem value={2024}>2024</MenuItem>
+              <MenuItem value={2023}>2023</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 4, justifyContent: 'center' }}>
+          <Box>
+            <BarChart
+              dataset={dataset}
+              xAxis={[
+                {
+                  dataKey: 'mes',
+                  tickPlacement: 'middle',
+                  tickLabelPlacement: 'tick',
+                  scaleType: 'band',
+                },
+              ]}
+              series={[{ dataKey: 'gastos', label: 'Gastos' }]}
+              height={300}
+              width={550}
+              margin={{ left: 0 }}
+            />
+          </Box>
+          <Box>
+            <BarChart
+              dataset={datasetProposicoes}
+              xAxis={[
+                {
+                  dataKey: 'mes',
+                  tickPlacement: 'middle',
+                  tickLabelPlacement: 'tick',
+                  scaleType: 'band',
+                },
+              ]}
+              series={[
+                { dataKey: 'pl', label: 'Projetos de Lei', stack: 'total' },
+                { dataKey: 'outras', label: 'Outras', stack: 'total' },
+              ]}
+              height={300}
+              width={550}
+              margin={{ left: 0 }}
+            />
+          </Box>
+          {datasetTipos.length > 0 && (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Typography variant="h6">Tipos de Proposição</Typography>
+              <PieChart
+                series={[
+                  {
+                    data: datasetTipos,
+                    innerRadius: 30,
+                    outerRadius: 100,
+                    paddingAngle: 5,
+                    cornerRadius: 5,
+                  },
+                ]}
+                height={300}
+                width={400}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

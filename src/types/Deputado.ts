@@ -16,12 +16,27 @@ export interface ResumoGastos {
     }>;
 }
 
+export interface ResumoProposicoes {
+    ano: number;
+    meses: Array<{
+        mes: number;
+        projetosDeLei: number;
+        outrasProposicoes: number;
+    }>;
+    tipos: Array<{
+        siglaTipo: string;
+        descricaoTipo: string;
+        quantidade: number;
+    }>;
+}
+
 export interface Deputado {
     _id: number;
     nome: string;
     urlFoto: string;
     estatisticas: EstatisticasDeputado;
     resumoGastos?: ResumoGastos[];
+    resumoProposicoes?: ResumoProposicoes[];
     siglaPartido: string;
     siglaUf: string;
     situacao: string;
