@@ -19,7 +19,7 @@ const DbCard = ({ deputado }: Props) => {
     };
 
     return (
-        <Card sx={{ maxWidth: 356, width: '100%' }}>
+        <Card sx={{ width: '100%' }}>
             <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: "28px" }}>
                     <Box
