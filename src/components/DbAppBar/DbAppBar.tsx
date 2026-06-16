@@ -1,6 +1,9 @@
 import { styled, alpha, type SxProps } from '@mui/material/styles';
+import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -24,13 +27,13 @@ const Search = styled('div')(({ theme }) => ({
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+  padding: theme.spacing(0, 1.5),
   height: '100%',
   position: 'absolute',
-  pointerEvents: 'none',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  zIndex: 1,
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -52,6 +55,33 @@ interface DbAppBarProps {
 }
 
 const DbAppBar = ({ sx }: DbAppBarProps) => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [searchValue, setSearchValue] = useState('');
+
+  const executeSearch = () => {
+    const params = new URLSearchParams(searchParams);
+
+    if (searchValue.trim()) {
+      params.set('nome', searchValue.trim());
+    } else {
+      params.delete('nome');
+    }
+
+    params.delete('page');
+    navigate({ pathname: '/', search: params.toString() });
+  };
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      executeSearch();
+    }
+  };
+
+  const handleSearchClick = () => {
+    executeSearch();
+  };
+
   return (
     <Box sx={sx}>
       <AppBar position="static">
@@ -115,11 +145,16 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
 
           <Search>
             <SearchIconWrapper>
-              <SearchIcon />
+              <IconButton size="small" onClick={handleSearchClick} color="inherit" aria-label="Pesquisar">
+                <SearchIcon />
+              </IconButton>
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Pesquise por deputados..."
               inputProps={{ 'aria-label': 'Pesquise por deputados...' }}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={handleSearch}
             />
           </Search>
         </Toolbar>

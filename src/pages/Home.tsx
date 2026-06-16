@@ -13,14 +13,15 @@ export const Home = () => {
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const ufParam = searchParams.get('uf') || '';
   const partidoParam = searchParams.get('siglaPartido') || '';
+  const nomeParam = searchParams.get('nome') || '';
 
   const [pagination, setPagination] = useState<PagedResponse<Deputado>>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchDeputados = async (page: number = 1, limit: number = 20, uf?: string, siglaPartido?: string) => {
+  const fetchDeputados = async (page: number = 1, limit: number = 20, uf?: string, siglaPartido?: string, nome?: string) => {
     setLoading(true);
     const api = new DepudadosAPI();
-    const response = await api.getDeputados(page, limit, uf, siglaPartido);
+    const response = await api.getDeputados(page, limit, uf, siglaPartido, nome);
 
     setPagination(response);
     setLoading(false);
@@ -44,8 +45,8 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    fetchDeputados(pageParam, 20, ufParam, partidoParam);
-  }, [pageParam, ufParam, partidoParam]);
+    fetchDeputados(pageParam, 20, ufParam, partidoParam, nomeParam);
+  }, [pageParam, ufParam, partidoParam, nomeParam]);
 
   return (
     <Box sx={

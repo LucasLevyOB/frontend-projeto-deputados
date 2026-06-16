@@ -12,7 +12,7 @@ export default class DepudadosAPI {
         });
     }
 
-    public getDeputados = async (page: number = 1, limit: number = 20, uf?: string, siglaPartido?: string): Promise<PagedResponse<Deputado>> => {
+    public getDeputados = async (page: number = 1, limit: number = 20, uf?: string, siglaPartido?: string, nome?: string): Promise<PagedResponse<Deputado>> => {
         try {
             const params = new URLSearchParams({
                 page: page.toString(),
@@ -20,6 +20,7 @@ export default class DepudadosAPI {
             });
             if (uf) params.append('uf', uf);
             if (siglaPartido) params.append('siglaPartido', siglaPartido);
+            if (nome) params.append('nome', nome);
 
             const response = await this.request.get(`/deputados?${params.toString()}`);
             return response.data;
