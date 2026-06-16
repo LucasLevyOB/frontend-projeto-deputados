@@ -24,10 +24,8 @@ const DbCard = ({ deputado }: Props) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: "28px" }}>
                     <Box
                         sx={{
-                            height: 96,
-                            width: 96,
-                            maxHeight: { xs: 96, md: 96 },
-                            maxWidth: { xs: 96, md: 96 },
+                            height: 152,
+                            width: 114,
                             borderRadius: '50%',
                             overflow: 'hidden',
                             mr: '16px',

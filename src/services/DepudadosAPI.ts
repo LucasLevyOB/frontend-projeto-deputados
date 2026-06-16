@@ -12,9 +12,16 @@ export default class DepudadosAPI {
         });
     }
 
-    public getDeputados = async (page: number = 1, limit: number = 20): Promise<PagedResponse<Deputado>> => {
+    public getDeputados = async (page: number = 1, limit: number = 20, uf?: string, siglaPartido?: string): Promise<PagedResponse<Deputado>> => {
         try {
-            const response = await this.request.get(`/deputados?page=${page}&limit=${limit}`);
+            const params = new URLSearchParams({
+                page: page.toString(),
+                limit: limit.toString()
+            });
+            if (uf) params.append('uf', uf);
+            if (siglaPartido) params.append('siglaPartido', siglaPartido);
+
+            const response = await this.request.get(`/deputados?${params.toString()}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching deputies:', error);
