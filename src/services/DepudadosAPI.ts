@@ -53,7 +53,8 @@ export default class DepudadosAPI {
     id: number,
     page: number = 1,
     limit: number = 20,
-    ano?: number
+    ano?: number,
+    descricao?: string
   ): Promise<PagedResponse<Despesa>> => {
     try {
       const params = new URLSearchParams({
@@ -63,6 +64,10 @@ export default class DepudadosAPI {
 
       if (ano) {
         params.append('ano', ano.toString());
+      }
+
+      if (descricao) {
+        params.append('descricao', descricao);
       }
 
       const response = await this.request.get(

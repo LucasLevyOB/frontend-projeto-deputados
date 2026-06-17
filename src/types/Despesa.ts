@@ -4,4 +4,5 @@ export interface Despesa {
     fornecedor: string;
     dataEmissao: string;
     descricaoEspecificacao: string;
+    urlDocumento: string;
 }
