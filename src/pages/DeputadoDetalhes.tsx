@@ -62,12 +62,27 @@ const formatDatasetProposicoes = (
   );
 };
 
+const formatDatasetCategorias = (
+  resumoGastos: ResumoGastos[] | undefined,
+  ano: number
+): { id: number; value: number; label: string }[] => {
+  if (!resumoGastos) return [];
+  const categorias =
+    resumoGastos.find((resumo) => resumo.ano === ano)?.categorias || [];
+  return categorias.map((c, index) => ({
+    id: index,
+    value: c.totalGasto,
+    label: c.descricao,
+  }));
+};
+
 const formatDatasetTipos = (
   resumoProposicoes: ResumoProposicoes[] | undefined,
   ano: number
 ): { id: number; value: number; label: string }[] => {
   if (!resumoProposicoes) return [];
-  const tipos = resumoProposicoes.find((resumo) => resumo.ano === ano)?.tipos || [];
+  const tipos =
+    resumoProposicoes.find((resumo) => resumo.ano === ano)?.tipos || [];
   return tipos.map((t, index) => ({
     id: index,
     value: t.quantidade,
@@ -80,10 +95,15 @@ export const DeputadoDetalhes = () => {
   const [deputado, setDeputado] = useState<Deputado | null>(null);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [dataset, setDataset] = useState<{ gastos: number; mes: string }[]>([]);
-  const [datasetProposicoes, setDatasetProposicoes] = useState<{ pl: number; outras: number; mes: string }[]>([]);
-  const [datasetTipos, setDatasetTipos] = useState<{ id: number; value: number; label: string }[]>([]);
-
-
+  const [datasetCategorias, setDatasetCategorias] = useState<
+    { id: number; value: number; label: string }[]
+  >([]);
+  const [datasetProposicoes, setDatasetProposicoes] = useState<
+    { pl: number; outras: number; mes: string }[]
+  >([]);
+  const [datasetTipos, setDatasetTipos] = useState<
+    { id: number; value: number; label: string }[]
+  >([]);
 
   const fetchDeputado = async (id: number) => {
     const api = new DepudadosAPI();
@@ -91,7 +111,12 @@ export const DeputadoDetalhes = () => {
 
     setDeputado(response[0]);
     setDataset(formatDataset(response[0].resumoGastos, ano));
-    setDatasetProposicoes(formatDatasetProposicoes(response[0].resumoProposicoes, ano));
+    setDatasetCategorias(
+      formatDatasetCategorias(response[0].resumoGastos, ano)
+    );
+    setDatasetProposicoes(
+      formatDatasetProposicoes(response[0].resumoProposicoes, ano)
+    );
     setDatasetTipos(formatDatasetTipos(response[0].resumoProposicoes, ano));
   };
 
@@ -101,9 +126,14 @@ export const DeputadoDetalhes = () => {
 
     if (deputado?.resumoGastos) {
       setDataset(formatDataset(deputado.resumoGastos, newYear));
+      setDatasetCategorias(
+        formatDatasetCategorias(deputado.resumoGastos, newYear)
+      );
     }
     if (deputado?.resumoProposicoes) {
-      setDatasetProposicoes(formatDatasetProposicoes(deputado.resumoProposicoes, newYear));
+      setDatasetProposicoes(
+        formatDatasetProposicoes(deputado.resumoProposicoes, newYear)
+      );
       setDatasetTipos(formatDatasetTipos(deputado.resumoProposicoes, newYear));
     }
   };
@@ -161,7 +191,14 @@ export const DeputadoDetalhes = () => {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '1200px' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          maxWidth: '1200px',
+        }}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -195,7 +232,15 @@ export const DeputadoDetalhes = () => {
           </FormControl>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 4, justifyContent: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: 4,
+            justifyContent: 'center',
+          }}
+        >
           <Box>
             <BarChart
               dataset={dataset}
@@ -234,7 +279,13 @@ export const DeputadoDetalhes = () => {
             />
           </Box>
           {datasetTipos.length > 0 && (
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
               <Typography variant="h6">Tipos de Proposição</Typography>
               <PieChart
                 series={[
@@ -251,9 +302,37 @@ export const DeputadoDetalhes = () => {
               />
             </Box>
           )}
+          {(datasetCategorias.length > 0 && (
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6">Gastos por Categoria</Typography>
+              <PieChart
+                series={[
+                  {
+                    data: datasetCategorias,
+                    innerRadius: 30,
+                    outerRadius: 100,
+                    paddingAngle: 5,
+                    cornerRadius: 5,
+                  },
+                ]}
+                height={300}
+                width={400}
+              />
+            </Box>
+          )) || <Box>Sem dados</Box>}
         </Box>
 
-        <DbVisualizarDespesas id={Number(id)} />
+        <DbVisualizarDespesas
+          id={Number(id)}
+          resumoGastos={deputado.resumoGastos}
+          ano={ano}
+        />
       </Box>
     </Box>
   );
