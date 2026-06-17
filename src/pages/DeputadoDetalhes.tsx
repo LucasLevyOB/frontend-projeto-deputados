@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -16,6 +17,7 @@ import { DbVisualizarDespesas } from '@/components/DbVisualizarDespesas';
 import type { SelectChangeEvent } from '@mui/material';
 import type { Deputado } from '@/types';
 import type { ResumoGastos, ResumoProposicoes } from '@/types/Deputado';
+import { DbEmptyState } from '@/components/DbEmptyState';
 
 const meses = [
   'Janeiro',
@@ -325,14 +327,23 @@ export const DeputadoDetalhes = () => {
                 width={400}
               />
             </Box>
-          )) || <Box>Sem dados</Box>}
+          )) || (
+            <DbEmptyState
+              title="Nenhum dado disponível para o ano selecionado."
+              description="Selecione outro ano para visualizar os gastos por categoria."
+            />
+          )}
         </Box>
 
-        <DbVisualizarDespesas
-          id={Number(id)}
-          resumoGastos={deputado.resumoGastos}
-          ano={ano}
-        />
+        <Grid container>
+          <Grid size={{ sm: 12, md: 6 }}>
+            <DbVisualizarDespesas
+              id={Number(id)}
+              resumoGastos={deputado.resumoGastos}
+              ano={ano}
+            />
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

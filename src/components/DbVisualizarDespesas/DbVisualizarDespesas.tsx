@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { formatCurrency } from '@/utils';
+import { DbEmptyState } from '@/components/DbEmptyState';
 
 import type { Despesa } from '@/types';
 import type { ResumoGastos } from '@/types/Deputado';
@@ -61,6 +62,20 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
       fetchDespesasData();
     }
   }, [id, pageDespesas, ano]);
+
+  if (despesas.length === 0) {
+    return (
+      <Box sx={{ width: '100%', mt: 4 }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>
+          Despesas
+        </Typography>
+        <DbEmptyState
+          title="Nenhuma despesa encontrada para o ano selecionado"
+          description="Selecione outro ano para visualizar as despesas."
+        />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ width: '100%', mt: 4 }}>
