@@ -123,10 +123,19 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
                         >
                           {despesa.descricaoEspecificacao}
                         </Typography>
-                        <Typography component="span" variant="body2">
-                          {formatCurrency(Number(despesa.valorLiquido))}
+                        <Typography variant="body2" sx={{ mb: 0.5 }}>
+                          Valor: {formatCurrency(Number(despesa.valorLiquido))}
                         </Typography>
-                        {` - Fornecedor: ${despesa.fornecedor} | Data: ${new Date(despesa.dataEmissao).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}`}
+                        <Typography variant="body2" sx={{ mb: 0.5 }}>
+                          Fornecedor: {despesa.fornecedor}
+                        </Typography>
+                        <Typography variant="body2">
+                          Data:{' '}
+                          {new Date(despesa.dataEmissao).toLocaleDateString(
+                            'pt-BR',
+                            { timeZone: 'UTC' }
+                          )}
+                        </Typography>
                       </>
                     }
                   />
