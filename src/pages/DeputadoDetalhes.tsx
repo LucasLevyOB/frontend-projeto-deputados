@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { BarChart, PieChart } from '@mui/x-charts';
 import { formatCurrency } from '@/utils';
+import { DbVisualizarDespesas } from '@/components/DbVisualizarDespesas';
 
 import type { SelectChangeEvent } from '@mui/material';
 import type { Deputado } from '@/types';
@@ -81,6 +82,8 @@ export const DeputadoDetalhes = () => {
   const [dataset, setDataset] = useState<{ gastos: number; mes: string }[]>([]);
   const [datasetProposicoes, setDatasetProposicoes] = useState<{ pl: number; outras: number; mes: string }[]>([]);
   const [datasetTipos, setDatasetTipos] = useState<{ id: number; value: number; label: string }[]>([]);
+
+
 
   const fetchDeputado = async (id: number) => {
     const api = new DepudadosAPI();
@@ -249,6 +252,8 @@ export const DeputadoDetalhes = () => {
             </Box>
           )}
         </Box>
+
+        <DbVisualizarDespesas id={Number(id)} />
       </Box>
     </Box>
   );
