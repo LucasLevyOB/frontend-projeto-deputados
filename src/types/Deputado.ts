@@ -14,6 +14,10 @@ export interface ResumoGastos {
         mes: number;
         totalGasto: number;
     }>;
+    categorias: Array<{
+        descricao: string;
+        totalGasto: number;
+    }>;
 }
 
 export interface ResumoProposicoes {
