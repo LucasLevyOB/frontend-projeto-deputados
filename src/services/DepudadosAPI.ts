@@ -1,4 +1,4 @@
-import type { Deputado, PagedResponse, Despesa } from '@/types';
+import type { Deputado, PagedResponse, Despesa, Proposicao } from '@/types';
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3001';
@@ -76,6 +76,48 @@ export default class DepudadosAPI {
       return response.data;
     } catch (error) {
       console.error('Error fetching expenses:', error);
+      return {
+        data: [],
+        total: 0,
+        page: 0,
+        limit: 0,
+        totalPages: 0,
+      };
+    }
+  };
+
+  public getProposicoesDeputado = async (
+    id: number,
+    page: number = 1,
+    limit: number = 20,
+    siglaTipo?: string,
+    ementa?: string,
+    ano?: number
+  ): Promise<PagedResponse<Proposicao>> => {
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+      });
+
+      if (siglaTipo) {
+        params.append('siglaTipo', siglaTipo);
+      }
+
+      if (ementa) {
+        params.append('ementa', ementa);
+      }
+
+      if (ano) {
+        params.append('ano', ano.toString());
+      }
+
+      const response = await this.request.get(
+        `/proposicoes/deputado/${id}?${params.toString()}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching proposicoes:', error);
       return {
         data: [],
         total: 0,
