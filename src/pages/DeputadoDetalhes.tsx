@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 import {
   Box,
+  Card,
+  CardContent,
+  Chip,
+  Divider,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   Typography,
 } from '@mui/material';
@@ -180,18 +185,135 @@ export const DeputadoDetalhes = () => {
           flexWrap: 'wrap',
           alignItems: 'center',
           gap: 4,
+          mt: 2,
         }}
       >
-        <Box>
-          <img src={deputado.urlFoto} alt={deputado.nome} />
-        </Box>
-        <Box>
-          <Typography variant="h4">{deputado.nome}</Typography>
-          <Typography variant="h6">
-            {deputado.siglaPartido} - {deputado.siglaUf}
-          </Typography>
+        <Paper elevation={0} sx={{ mr: '16px' }}>
+          <Box
+            src={deputado.urlFoto}
+            alt={"Foto de " + deputado.nome}
+            component='img'
+            sx={{
+              width: 196,
+              borderRadius: '8px',
+            }}
+          />
+        </Paper>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{deputado.nome}</Typography>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <Typography variant="h6" color="text.secondary">
+              {deputado.siglaPartido} - {deputado.siglaUf}
+            </Typography>
+            {deputado.situacao && (
+              <Chip
+                label={deputado.situacao}
+                color={deputado.situacao === 'Exercício' ? 'success' : 'default'}
+                size="small"
+              />
+            )}
+          </Box>
+          {deputado.nomeEleitoral && deputado.nomeEleitoral !== deputado.nome && (
+            <Typography variant="body2" color="text.secondary">
+              <strong>Nome Eleitoral:</strong> {deputado.nomeEleitoral}
+            </Typography>
+          )}
         </Box>
       </Box>
+
+      <Grid container spacing={3} sx={{ width: '100%', maxWidth: '1200px' }}>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom color="primary">Dados Pessoais</Typography>
+              <Divider sx={{ mb: 2 }} />
+              <Typography variant="body2"><strong>Escolaridade:</strong> {deputado.escolaridade || 'Não informada'}</Typography>
+              <Typography variant="body2" sx={{ mt: 1 }}><strong>Condição Eleitoral:</strong> {deputado.condicaoEleitoral || 'Não informada'}</Typography>
+              {deputado.descricaoStatus && (
+                <Typography variant="body2" sx={{ mt: 1 }}><strong>Status:</strong> {deputado.descricaoStatus}</Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom color="primary">Gabinete</Typography>
+              <Divider sx={{ mb: 2 }} />
+              {deputado.gabinete && deputado.gabinete.nome ? (
+                <>
+                  <Typography variant="body2">
+                    <strong>Local:</strong> Prédio {deputado.gabinete.predio}, Sala {deputado.gabinete.sala}, Andar {deputado.gabinete.andar}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 1 }}>
+                    <strong>Telefone:</strong> {deputado.gabinete.telefone || 'Não informado'}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mt: 1 }}>
+                    <strong>E-mail:</strong>{' '}
+                    {deputado.gabinete.email ? (
+                      <a href={`mailto:${deputado.gabinete.email}`} style={{ color: 'inherit' }}>
+                        {deputado.gabinete.email}
+                      </a>
+                    ) : (
+                      'Não informado'
+                    )}
+                  </Typography>
+                </>
+              ) : (
+                <Typography variant="body2">Informações de gabinete não disponíveis.</Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom color="primary">Desempenho Geral</Typography>
+              <Divider sx={{ mb: 2 }} />
+              {deputado.estatisticas ? (
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 6 }}>
+                    <Typography variant="caption" color="text.secondary">Score de Eficiência</Typography>
+                    <Typography variant="h5" color="secondary" sx={{ fontWeight: 'bold' }}>
+                      {deputado.estatisticas.scoreEficiencia}
+                    </Typography>
+                  </Grid>
+                  <Grid size={{ xs: 6 }}>
+                    <Typography variant="caption" color="text.secondary">Projetos de Lei</Typography>
+                    <Typography variant="h6">{deputado.estatisticas.projetosDeLei}</Typography>
+                  </Grid>
+                  <Grid size={{ xs: 6 }}>
+                    <Typography variant="caption" color="text.secondary">Total Proposições</Typography>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{deputado.estatisticas.totalProposicoes}</Typography>
+                  </Grid>
+                  <Grid size={{ xs: 6 }}>
+                    <Typography variant="caption" color="text.secondary">Custo / PL</Typography>
+                    <Typography variant="subtitle2" color="error.main">
+                      {formatCurrency(deputado.estatisticas.custoPorProjetoLei)}
+                    </Typography>
+                  </Grid>
+                  <Grid size={{ xs: 6 }}>
+                    <Typography variant="caption" color="text.secondary">Total Despesas</Typography>
+                    <Typography variant="subtitle2" color="error.main" sx={{ fontWeight: 'bold' }}>
+                      {formatCurrency(deputado.estatisticas.gastosDespesas)}
+                    </Typography>
+                  </Grid>
+                  <Grid size={{ xs: 6 }}>
+                    <Typography variant="caption" color="text.secondary">Custo / Proposição</Typography>
+                    <Typography variant="subtitle2" color="error.main">
+                      {formatCurrency(deputado.estatisticas.custoPorProposicao)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Typography variant="body2">Estatísticas não disponíveis.</Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
       <Box
         sx={{
@@ -328,11 +450,11 @@ export const DeputadoDetalhes = () => {
               />
             </Box>
           )) || (
-            <DbEmptyState
-              title="Nenhum dado disponível para o ano selecionado."
-              description="Selecione outro ano para visualizar os gastos por categoria."
-            />
-          )}
+              <DbEmptyState
+                title="Nenhum dado disponível para o ano selecionado."
+                description="Selecione outro ano para visualizar os gastos por categoria."
+              />
+            )}
         </Box>
 
         <Grid container>
