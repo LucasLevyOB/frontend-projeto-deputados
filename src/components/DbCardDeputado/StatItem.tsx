@@ -1,4 +1,4 @@
-import { Box, Paper } from '@mui/material';
+import { Box } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 interface StatItemProps {
@@ -10,23 +10,23 @@ interface StatItemProps {
 const StatItem = ({ label, value, highlight = false }: StatItemProps) => {
     if (highlight) {
         return (
-            <Paper elevation={0} variant="outlined" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: '16px', mr: 'auto', ml: 'auto' }}>
-                <Typography variant="h5">
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: '8px 16px', bgcolor: 'primary.light', color: 'primary.contrastText', borderRadius: 2, mr: 'auto', ml: 'auto' }}>
+                <Typography variant="h6">
                     {value}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="caption" sx={{ textTransform: 'uppercase', letterSpacing: 1, opacity: 0.9 }}>
                     {label}
                 </Typography>
-            </Paper>
+            </Box>
         );
     }
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Typography variant="button">
+            <Typography variant="h6">
                 {value}
             </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            <Typography variant="caption" sx={{ color: 'text.secondary', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 {label}
             </Typography>
         </Box>

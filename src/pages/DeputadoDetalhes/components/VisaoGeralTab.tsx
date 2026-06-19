@@ -98,40 +98,40 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
         </Typography>
         {deputado.estatisticas ? (
           <Grid container spacing={2}>
-            <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <StatCard
                 title="Score Eficiência"
                 value={deputado.estatisticas.scoreEficiencia.toFixed(2)}
                 color="secondary.main"
               />
             </Grid>
-            <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <StatCard
                 title="Projetos de Lei"
                 value={deputado.estatisticas.projetosDeLei}
               />
             </Grid>
-            <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <StatCard
                 title="Total Proposições"
                 value={deputado.estatisticas.totalProposicoes}
               />
             </Grid>
-            <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <StatCard
                 title="Total Despesas"
                 value={formatCurrency(deputado.estatisticas.gastosDespesas)}
                 color="error.main"
               />
             </Grid>
-            <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <StatCard
                 title="Custo / PL"
                 value={formatCurrency(deputado.estatisticas.custoPorProjetoLei)}
                 color="error.main"
               />
             </Grid>
-            <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <StatCard
                 title="Custo / Proposição"
                 value={formatCurrency(deputado.estatisticas.custoPorProposicao)}

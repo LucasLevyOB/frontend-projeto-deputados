@@ -1,7 +1,6 @@
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { Box, Button } from '@mui/material';
+import { Box, CardActionArea, Chip, Divider } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import StatItem from './StatItem';
 
@@ -19,39 +18,55 @@ const DbCard = ({ deputado }: Props) => {
     };
 
     return (
-        <Card sx={{ width: '100%' }}>
-            <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: "28px" }}>
-                    <Box
-                        sx={{
-                            height: 152,
-                            width: 114,
-                            borderRadius: '50%',
-                            overflow: 'hidden',
-                            mr: '16px',
-                        }}
-                        src={deputado.urlFoto}
-                        alt={"Foto de " + deputado.nome}
-                        component='img'
-                    />
-                    <Box sx={{ mr: 'auto', ml: 'auto' }}>
-                        <Typography variant="h6" component="h2" sx={{ textAlign: 'center', mb: .5 }}>
+        <Card 
+            sx={{ 
+                width: '100%', 
+                borderRadius: 4, 
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                    transform: 'translateY(-6px)',
+                    boxShadow: 6
+                }
+            }}
+        >
+            <CardActionArea onClick={handleVerDetalhes} sx={{ height: '100%' }}>
+                <CardContent sx={{ p: 3 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
+                        <Box
+                            sx={{
+                                height: 100,
+                                width: 100,
+                                borderRadius: '50%',
+                                overflow: 'hidden',
+                                mb: 2,
+                                boxShadow: 2,
+                            }}
+                            src={deputado.urlFoto}
+                            alt={"Foto de " + deputado.nome}
+                            component='img'
+                            style={{ objectFit: 'cover', objectPosition: 'top' }}
+                        />
+                        <Typography variant="h6" component="h2" sx={{ textAlign: 'center', mb: 1, lineHeight: 1.2 }}>
                             {deputado.nome}
                         </Typography>
-                        <Typography variant="caption" component="h6" sx={{ color: 'text.secondary', textAlign: 'center' }}>
-                            {deputado.siglaPartido} - {deputado.siglaUf}
-                        </Typography>
+                        <Chip 
+                            label={`${deputado.siglaPartido} - ${deputado.siglaUf}`} 
+                            size="small" 
+                            color="primary" 
+                            variant="outlined" 
+                            sx={{ fontWeight: 'bold' }}
+                        />
                     </Box>
-                </Box>
-                <StatItem label="Score Eficiência" value={deputado.estatisticas.scoreEficiencia} highlight />
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', mt: '16px' }}>
-                    <StatItem label="Projetos de Lei" value={deputado.estatisticas.projetosDeLei} />
-                    <StatItem label="Total de Proposições" value={deputado.estatisticas.totalProposicoes} />
-                </Box>
-            </CardContent>
-            <CardActions>
-                <Button size="small" sx={{ ml: 'auto' }} onClick={handleVerDetalhes}>Ver Detalhes</Button>
-            </CardActions>
+                    
+                    <StatItem label="Eficiência" value={deputado.estatisticas.scoreEficiencia} highlight />
+                    
+                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', mt: 3, px: 1 }}>
+                        <StatItem label="Projetos" value={deputado.estatisticas.projetosDeLei} />
+                        <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
+                        <StatItem label="Proposições" value={deputado.estatisticas.totalProposicoes} />
+                    </Box>
+                </CardContent>
+            </CardActionArea>
         </Card>
     );
 };
