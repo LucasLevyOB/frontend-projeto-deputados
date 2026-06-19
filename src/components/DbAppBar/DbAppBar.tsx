@@ -69,7 +69,7 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
     }
 
     params.delete('page');
-    navigate({ pathname: '/', search: params.toString() });
+    navigate({ pathname: '/deputados', search: params.toString() });
   };
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -137,9 +137,9 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
               variant="text"
               color="inherit"
               sx={{ display: { xs: 'none', sm: 'block' } }}
-              href="/"
+              href="/deputados"
             >
-              Detalhamento
+              Deputados
             </Button>
           </Box>
 

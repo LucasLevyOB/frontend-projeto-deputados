@@ -81,7 +81,6 @@ export const ProposicoesTab = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      {/* Filtro e Total */}
       <Paper
         sx={{
           p: 3,
@@ -187,9 +186,8 @@ export const ProposicoesTab = ({
                     width={400}
                     slotProps={{
                       legend: {
-                        direction: 'row',
-                        position: { vertical: 'bottom', horizontal: 'middle' },
-                        padding: 0,
+                        direction: 'horizontal',
+                        position: { vertical: 'bottom', horizontal: 'center' },
                       },
                     }}
                   />

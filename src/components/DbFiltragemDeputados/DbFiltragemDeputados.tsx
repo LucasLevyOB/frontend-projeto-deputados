@@ -23,7 +23,7 @@ const DbFiltragemDeputados = ({ uf, partido, handleFilterChange }: DbFiltragemDe
     }, []);
 
     return (
-        <Box sx={{ width: '100%', px: { xs: 2, sm: 3, md: 5 }, pt: 3, display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: { xs: 'flex-start', md: 'flex-end' }, alignItems: 'center' }}>
             <Autocomplete
                 options={ESTADOS_UF}
                 getOptionLabel={(option) => option.nome + ' (' + option.sigla + ')'}

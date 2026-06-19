@@ -199,9 +199,8 @@ export const DespesasTab = ({
                     width={400}
                     slotProps={{
                       legend: {
-                        direction: 'row',
-                        position: { vertical: 'bottom', horizontal: 'middle' },
-                        padding: 0,
+                        direction: 'horizontal',
+                        position: { vertical: 'bottom', horizontal: 'center' },
                       },
                     }}
                   />
@@ -217,10 +216,9 @@ export const DespesasTab = ({
         </Grid>
       </Grid>
 
-      {/* Tabela de Despesas */}
       <Box>
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
-          Detalhamento das Despesas
+          Detalhamento da Cota Parlamentar
         </Typography>
         <DbVisualizarDespesas id={id} resumoGastos={resumoGastos} ano={ano} />
       </Box>

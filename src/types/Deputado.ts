@@ -56,4 +56,5 @@ export interface Deputado {
         email: string | null;
     };
     escolaridade: string | null;
+    urlRedeSocial: string[] | null;
 }

@@ -168,7 +168,7 @@ export const DeputadoDetalhes = () => {
             scrollButtons="auto"
           >
             <Tab label="Visão Geral" {...a11yProps(0)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
-            <Tab label="Despesas" {...a11yProps(1)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
+            <Tab label="Cota Parlamentar" {...a11yProps(1)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
             <Tab label="Proposições" {...a11yProps(2)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
           </Tabs>
         </Box>

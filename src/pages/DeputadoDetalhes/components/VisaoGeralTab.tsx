@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, Divider, Grid, Typography, Box } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, Grid, Typography, Box, IconButton, Tooltip } from '@mui/material';
 import { StatCard } from './StatCard';
-import { formatCurrency } from '@/utils';
+import { formatCurrency, getRedeSocialIcon, getRedeSocialName } from '@/utils';
 
 import type { Deputado } from '@/types';
 
@@ -11,12 +11,10 @@ interface VisaoGeralTabProps {
 export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
   return (
     <Grid container spacing={3}>
-      {/* Informações Pessoais */}
       <Grid size={{ xs: 12, md: 6 }}>
         <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
           <CardHeader
             title="Dados Pessoais"
-            titleTypographyProps={{ variant: 'h6', color: 'primary' }}
           />
           <Divider />
           <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
@@ -31,16 +29,38 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
                 <strong>Status:</strong> {deputado.descricaoStatus}
               </Typography>
             )}
+
+            {deputado.urlRedeSocial && deputado.urlRedeSocial.length > 0 && (
+              <Box>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1, fontWeight: 'bold' }}>
+                  Redes Sociais:
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                  {deputado.urlRedeSocial.map((url, index) => (
+                    <Tooltip key={index} title={getRedeSocialName(url)}>
+                      <IconButton 
+                        component="a" 
+                        href={url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        color="primary"
+                        sx={{ bgcolor: 'action.hover' }}
+                      >
+                        {getRedeSocialIcon(url)}
+                      </IconButton>
+                    </Tooltip>
+                  ))}
+                </Box>
+              </Box>
+            )}
           </CardContent>
         </Card>
       </Grid>
 
-      {/* Informações de Gabinete */}
       <Grid size={{ xs: 12, md: 6 }}>
         <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
           <CardHeader
             title="Gabinete"
-            titleTypographyProps={{ variant: 'h6', color: 'primary' }}
           />
           <Divider />
           <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
@@ -72,7 +92,6 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
         </Card>
       </Grid>
 
-      {/* Desempenho Geral (Estatísticas) */}
       <Grid size={{ xs: 12 }}>
         <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
           Resumo do Mandato
