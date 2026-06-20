@@ -51,7 +51,7 @@ export const Deputados = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 4, md: 6 }, display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: { xs: 'flex-start', md: 'center' }, justifyContent: 'space-between', mb: 4, gap: 3 }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: { xs: 'flex-start', md: 'center' }, justifyContent: 'space-between', mb: 6, gap: 3 }}>
         <Box>
           <Typography variant="h4" component="h1">
             Deputados Federais
@@ -67,14 +67,14 @@ export const Deputados = () => {
 
       {!loading && pagination?.data.length === 0 ? (
         <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <DbEmptyState 
-            title="Nenhum deputado encontrado" 
-            description="Tente ajustar os filtros de busca (nome, estado ou partido) para encontrar o parlamentar desejado." 
+          <DbEmptyState
+            title="Nenhum deputado encontrado"
+            description="Tente ajustar os filtros de busca (nome, estado ou partido) para encontrar o parlamentar desejado."
           />
         </Box>
       ) : (
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container direction="row" rowSpacing={{ sm: 4, md: 6 }} columnSpacing={{ xs: 1, sm: 3, md: 4, lg: 5, xl: 6 }} sx={{ justifyContent: 'start', alignItems: 'center', pb: 4, width: '100%' }}>
+          <Grid container direction="row" rowSpacing={{ xs: 4, sm: 4, md: 6 }} columnSpacing={{ xs: 1, sm: 3, md: 4, lg: 5, xl: 6 }} sx={{ justifyContent: 'start', alignItems: 'center', pb: 4, width: '100%' }}>
             {loading ? (
               Array.from({ length: 12 }).map((_, index) => (
                 <Grid key={index} size={{ xs: 12, sm: 6, md: 6, lg: 4, xl: 3 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -94,10 +94,10 @@ export const Deputados = () => {
 
       {(!loading && (pagination?.totalPages || 0) > 1) && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <Pagination 
-            count={pagination?.totalPages || 1} 
-            page={pagination?.page ?? 1} 
-            onChange={handlePageChange} 
+          <Pagination
+            count={pagination?.totalPages || 1}
+            page={pagination?.page ?? 1}
+            onChange={handlePageChange}
             color="primary"
             size="large"
           />

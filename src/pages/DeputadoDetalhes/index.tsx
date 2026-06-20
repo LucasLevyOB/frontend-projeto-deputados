@@ -91,13 +91,11 @@ export const DeputadoDetalhes = () => {
       }}
     >
       <Paper
-        elevation={0}
+        variant='outlined'
         sx={{
           width: '100%',
           p: 4,
           borderRadius: 3,
-          boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-          background: 'linear-gradient(to right bottom, #ffffff, #f9fafb)',
           border: '1px solid',
           borderColor: 'divider',
         }}

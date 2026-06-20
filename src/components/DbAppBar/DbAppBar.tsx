@@ -13,6 +13,10 @@ import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import DarkModeOutlined from '@mui/icons-material/DarkModeOutlined';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useThemeContext } from '../../theme';
+import { Tooltip } from '@mui/material';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -67,7 +71,8 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState('');
-  
+  const { isDarkMode, toggleTheme } = useThemeContext();
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -140,7 +145,7 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
               }}
             >
               <MenuItem onClick={() => handleNavigate('/')}>
-                <Typography sx={{ textAlign: 'center' }}>Home</Typography>
+                <Typography sx={{ textAlign: 'center' }}>Início</Typography>
               </MenuItem>
               <MenuItem onClick={() => handleNavigate('/deputados')}>
                 <Typography sx={{ textAlign: 'center' }}>Deputados</Typography>
@@ -195,7 +200,7 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
               onClick={() => handleNavigate('/')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-              Home
+              Início
             </Button>
             <Button
               onClick={() => handleNavigate('/deputados')}
@@ -204,6 +209,12 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
               Deputados
             </Button>
           </Box>
+
+          <Tooltip title={isDarkMode ? 'Tema claro' : 'Tema escuro'}>
+            <IconButton sx={{ ml: 1, mr: 1 }} onClick={toggleTheme} color="inherit" aria-label="Alternar tema">
+              {isDarkMode ? <DarkModeOutlined /> : <Brightness7Icon />}
+            </IconButton>
+          </Tooltip>
 
           <Search>
             <SearchIconWrapper>

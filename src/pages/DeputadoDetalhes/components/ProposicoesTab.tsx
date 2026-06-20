@@ -89,7 +89,7 @@ export const ProposicoesTab = ({
           flexWrap: 'wrap',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 2,
+          gap: 4,
         }}
       >
         <Box>
