@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { Home } from '@/pages/Home';
 import { RootLayout } from '@/layouts/RootLayout';
-import { DeputadoDetalhes } from '@/pages/DeputadoDetalhes/index';
+import { DeputadoDetalhes } from '@/pages/DeputadoDetalhes';
 import { Deputados } from '@/pages/Deputados';
 
 export const router = createBrowserRouter([

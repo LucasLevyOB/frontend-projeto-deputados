@@ -94,7 +94,6 @@ export const DespesasTab = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      {/* Filtro e Total */}
       <Paper
         sx={{
           p: 3,
@@ -138,7 +137,6 @@ export const DespesasTab = ({
         </FormControl>
       </Paper>
 
-      {/* Gráficos */}
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 7 }}>
           <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
@@ -147,25 +145,32 @@ export const DespesasTab = ({
             <CardContent
               sx={{ display: 'flex', justifyContent: 'center', pt: 4 }}
             >
-              <Box
-                sx={{
-                  width: '100%',
-                  overflowX: 'auto',
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <BarChart
-                  dataset={dataset}
-                  xAxis={[{ dataKey: 'mes', scaleType: 'band' }]}
-                  series={[
-                    { dataKey: 'gastos', label: 'Gastos', color: '#f44336' },
-                  ]}
-                  height={350}
-                  width={600}
-                  margin={{ left: 80, right: 20, top: 20, bottom: 30 }}
+              {dataset.length > 0 ? (
+                <Box
+                  sx={{
+                    width: '100%',
+                    overflowX: 'auto',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <BarChart
+                    dataset={dataset}
+                    xAxis={[{ dataKey: 'mes', scaleType: 'band' }]}
+                    series={[
+                      { dataKey: 'gastos', label: 'Gastos', color: '#f44336' },
+                    ]}
+                    height={350}
+                    width={600}
+                    margin={{ left: 80, right: 20, top: 20, bottom: 30 }}
+                  />
+                </Box>
+              ) : (
+                <DbEmptyState
+                  title="Não existem gastos para o ano selecionado."
+                  description={`Este deputado ainda não registrou gastos no ano de ${ano}.`}
                 />
-              </Box>
+              )}
             </CardContent>
           </Card>
         </Grid>
@@ -207,8 +212,8 @@ export const DespesasTab = ({
                 </Box>
               ) : (
                 <DbEmptyState
-                  title="Nenhum dado disponível"
-                  description="Selecione outro ano para visualizar os gastos por categoria."
+                  title="Não existem gastos para o ano selecionado."
+                  description={`Este deputado ainda não registrou gastos no ano de ${ano}.`}
                 />
               )}
             </CardContent>

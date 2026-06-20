@@ -7,9 +7,11 @@ import {
   Tab,
   Avatar,
   Chip,
+  Button,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import DepudadosAPI from '@/services/DepudadosAPI';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import type { SelectChangeEvent } from '@mui/material';
 import type { Deputado } from '@/types';
 
@@ -47,8 +49,9 @@ function a11yProps(index: number) {
   };
 }
 
-export const DeputadoDetalhes = () => {
+const DeputadoDetalhes = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [deputado, setDeputado] = useState<Deputado | null>(null);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [tabValue, setTabValue] = useState(0);
@@ -90,6 +93,17 @@ export const DeputadoDetalhes = () => {
         mb: 8,
       }}
     >
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start', mb: -1 }}>
+        <Button 
+          startIcon={<ArrowBackIcon />} 
+          onClick={() => navigate(-1)}
+          color="inherit"
+          variant="text"
+        >
+          Voltar
+        </Button>
+      </Box>
+
       <Paper
         variant='outlined'
         sx={{
@@ -210,3 +224,5 @@ export const DeputadoDetalhes = () => {
     </Box>
   );
 };
+
+export default DeputadoDetalhes;

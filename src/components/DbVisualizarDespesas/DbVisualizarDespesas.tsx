@@ -99,8 +99,8 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
                     Despesas
                 </Typography>
                 <DbEmptyState
-                    title="Nenhuma despesa encontrada para o ano selecionado"
-                    description="Selecione outro ano para visualizar as despesas."
+                    title="Não existem gastos para o ano selecionado."
+                    description={`Este deputado ainda não registrou gastos no ano de ${ano}.`}
                 />
             </Box>
         );
