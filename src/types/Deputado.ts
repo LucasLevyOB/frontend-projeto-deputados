@@ -5,6 +5,7 @@ export interface EstatisticasDeputado {
     scoreEficiencia: number;
     custoPorProjetoLei: number;
     custoPorProposicao: number;
+    temasProposicoes?: Array<{ tema: string; quantidade: number }>;
 }
 
 export interface ResumoGastos {
@@ -22,6 +23,7 @@ export interface ResumoGastos {
 
 export interface ResumoProposicoes {
     ano: number;
+    total: number;
     meses: Array<{
         mes: number;
         projetosDeLei: number;

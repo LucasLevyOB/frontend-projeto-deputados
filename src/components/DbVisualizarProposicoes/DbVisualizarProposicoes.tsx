@@ -11,6 +11,7 @@ import {
     Link,
     TextField,
     InputAdornment,
+    Tooltip,
 } from '@mui/material';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { DbEmptyState } from '@/components/DbEmptyState';
@@ -120,12 +121,14 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                     placeholder="Buscar por ementa..."
                     value={ementa}
                     onChange={(e) => setEmenta(e.target.value)}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Search />
-                            </InputAdornment>
-                        ),
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        }
                     }}
                     size="small"
                 />
@@ -136,15 +139,18 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                     {resumoProposicoes
                         .find((r) => r.ano === ano)
                         ?.tipos.map((tipo, idx) => (
-                            <Chip
-                                key={idx}
-                                label={`${tipo.siglaTipo} (${tipo.quantidade})`}
-                                variant={siglaTipo === tipo.siglaTipo ? "filled" : "outlined"}
-                                color={siglaTipo === tipo.siglaTipo ? "primary" : "default"}
-                                clickable
-                                onClick={() => handleSiglaTipo(tipo.siglaTipo)}
-                                onDelete={siglaTipo === tipo.siglaTipo ? () => handleSiglaTipo(undefined) : undefined}
-                            />
+                            <Tooltip title={tipo.descricaoTipo}>
+                                <Chip
+                                    key={idx}
+                                    label={`${tipo.siglaTipo} (${tipo.quantidade})`}
+                                    variant={siglaTipo === tipo.siglaTipo ? "filled" : "outlined"}
+                                    color={siglaTipo === tipo.siglaTipo ? "primary" : "default"}
+                                    aria-label={tipo.descricaoTipo}
+                                    clickable
+                                    onClick={() => handleSiglaTipo(tipo.siglaTipo)}
+                                    onDelete={siglaTipo === tipo.siglaTipo ? () => handleSiglaTipo(undefined) : undefined}
+                                />
+                            </Tooltip>
                         ))}
                 </Box>
             )}
@@ -171,6 +177,7 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                                 <Box key={`${proposicao.id}-${index}`} ref={isLast ? lastElementRef : null}>
                                     <ListItem>
                                         <ListItemText
+                                            disableTypography
                                             primary={
                                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
                                                     <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
@@ -188,7 +195,19 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                                                     <Typography component="span" variant="body2" color="text.secondary" sx={{ display: 'block', mb: 0.5, mt: 0.5 }}>
                                                         {proposicao.ementa}
                                                     </Typography>
-                                                    <Typography component="span" variant="caption" color="text.disabled">
+                                                    {proposicao.temas && proposicao.temas.length > 0 && (
+                                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
+                                                            {proposicao.temas.map((tema, idx) => (
+                                                                <Chip
+                                                                    key={idx}
+                                                                    label={tema}
+                                                                    size="small"
+                                                                    variant="outlined"
+                                                                />
+                                                            ))}
+                                                        </Box>
+                                                    )}
+                                                    <Typography component="span" variant="caption" color="text.disabled" sx={{ mt: 0.5, display: 'block' }}>
                                                         Apresentação:{' '}
                                                         {new Date(proposicao.dataApresentacao).toLocaleDateString(
                                                             'pt-BR',

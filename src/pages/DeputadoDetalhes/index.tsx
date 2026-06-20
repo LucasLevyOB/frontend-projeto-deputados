@@ -154,6 +154,22 @@ export const DeputadoDetalhes = () => {
                 <strong>Nome Eleitoral:</strong> {deputado.nomeEleitoral}
               </Typography>
             )}
+
+            {deputado.estatisticas?.temasProposicoes && deputado.estatisticas.temasProposicoes.length > 0 && (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: { xs: 'center', sm: 'flex-start' }, mt: 1 }}>
+                {deputado.estatisticas.temasProposicoes
+                  .slice(0, 3)
+                  .map((temaObj, index) => (
+                    <Chip
+                      key={index}
+                      label={temaObj.tema}
+                      color="primary"
+                      size="small"
+                      variant="filled"
+                    />
+                  ))}
+              </Box>
+            )}
           </Box>
         </Box>
       </Paper>

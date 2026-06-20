@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Divider, Grid, Typography, Box, IconButton, Tooltip } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, Grid, Typography, Box, IconButton, Tooltip, Chip } from '@mui/material';
 import { StatCard } from './StatCard';
 import { formatCurrency, getRedeSocialIcon, getRedeSocialName } from '@/utils';
 
@@ -38,10 +38,10 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                   {deputado.urlRedeSocial.map((url, index) => (
                     <Tooltip key={index} title={getRedeSocialName(url)}>
-                      <IconButton 
-                        component="a" 
-                        href={url} 
-                        target="_blank" 
+                      <IconButton
+                        component="a"
+                        href={url}
+                        target="_blank"
                         rel="noopener noreferrer"
                         color="primary"
                         sx={{ bgcolor: 'action.hover' }}
@@ -101,7 +101,7 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <StatCard
                 title="Score Eficiência"
-                value={deputado.estatisticas.scoreEficiencia.toFixed(2)}
+                value={deputado.estatisticas.scoreEficiencia}
                 color="secondary.main"
               />
             </Grid>
@@ -147,6 +147,32 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
           </Card>
         )}
       </Grid>
+
+      {deputado.estatisticas?.temasProposicoes && deputado.estatisticas.temasProposicoes.length > 0 && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
+            Principais Temas de Atuação
+          </Typography>
+          <Card sx={{ p: 3, borderRadius: 2, boxShadow: 1 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+              {deputado.estatisticas.temasProposicoes
+                .slice(0, 15)
+                .map((temaObj, index) => (
+                  <Chip
+                    key={index}
+                    label={temaObj.tema}
+                    color="primary"
+                    variant={index < 3 ? "filled" : "outlined"}
+                    sx={{
+                      fontWeight: index < 3 ? 'bold' : 'normal',
+                      px: index < 3 ? 1 : 0
+                    }}
+                  />
+                ))}
+            </Box>
+          </Card>
+        </Grid>
+      )}
     </Grid>
   );
 };

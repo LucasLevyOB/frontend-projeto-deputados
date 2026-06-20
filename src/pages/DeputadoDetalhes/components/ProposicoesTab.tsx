@@ -105,7 +105,7 @@ export const ProposicoesTab = ({
             color="primary.main"
             sx={{ fontWeight: 'bold' }}
           >
-            {resumoProposicoes?.find((r) => r.ano === ano)?.totalProposicoes || 0}
+            {resumoProposicoes?.find((r) => r.ano === ano)?.total || 0}
           </Typography>
         </Box>
         <FormControl sx={{ minWidth: 150 }}>
@@ -124,7 +124,6 @@ export const ProposicoesTab = ({
         </FormControl>
       </Paper>
 
-      {/* Gráficos */}
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 7 }}>
           <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
@@ -203,7 +202,6 @@ export const ProposicoesTab = ({
         </Grid>
       </Grid>
 
-      {/* Tabela de Proposições */}
       <Box>
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
           Detalhamento das Proposições

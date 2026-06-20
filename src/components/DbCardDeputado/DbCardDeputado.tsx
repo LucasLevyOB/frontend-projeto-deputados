@@ -18,10 +18,10 @@ const DbCard = ({ deputado }: Props) => {
     };
 
     return (
-        <Card 
-            sx={{ 
-                width: '100%', 
-                borderRadius: 4, 
+        <Card
+            sx={{
+                width: '100%',
+                borderRadius: 4,
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
                     transform: 'translateY(-6px)',
@@ -49,22 +49,41 @@ const DbCard = ({ deputado }: Props) => {
                         <Typography variant="h6" component="h2" sx={{ textAlign: 'center', mb: 1, lineHeight: 1.2 }}>
                             {deputado.nome}
                         </Typography>
-                        <Chip 
-                            label={`${deputado.siglaPartido} - ${deputado.siglaUf}`} 
-                            size="small" 
-                            color="primary" 
-                            variant="outlined" 
+                        <Chip
+                            label={`${deputado.siglaPartido} - ${deputado.siglaUf}`}
+                            size="small"
+                            color="primary"
+                            variant="outlined"
                             sx={{ fontWeight: 'bold' }}
                         />
                     </Box>
-                    
+
                     <StatItem label="Eficiência" value={deputado.estatisticas.scoreEficiencia} highlight />
-                    
-                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', mt: 3, px: 1 }}>
+
+                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', mt: 3, mb: 2, px: 1 }}>
                         <StatItem label="Projetos" value={deputado.estatisticas.projetosDeLei} />
                         <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
                         <StatItem label="Proposições" value={deputado.estatisticas.totalProposicoes} />
                     </Box>
+                    {deputado.estatisticas.temasProposicoes && deputado.estatisticas.temasProposicoes.length > 0 && (
+                        <>
+                            <Divider sx={{ my: 1.5 }} />
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, justifyContent: 'center' }}>
+                                {deputado.estatisticas.temasProposicoes
+                                    .slice(0, 3)
+                                    .map((temaObj, index) => (
+                                        <Chip
+                                            key={index}
+                                            label={temaObj.tema}
+                                            color="primary"
+                                            size="small"
+                                            variant="outlined"
+                                            sx={{ fontSize: '0.7rem', height: 20 }}
+                                        />
+                                    ))}
+                            </Box>
+                        </>
+                    )}
                 </CardContent>
             </CardActionArea>
         </Card>
