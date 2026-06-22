@@ -10,7 +10,7 @@ interface StatItemProps {
 const StatItem = ({ label, value, highlight = false }: StatItemProps) => {
     if (highlight) {
         return (
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: '8px 16px', bgcolor: 'primary.light', color: 'primary.contrastText', borderRadius: 2, mr: 'auto', ml: 'auto' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: '8px 16px', bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: 2, mr: 'auto', ml: 'auto' }}>
                 <Typography variant="h6">
                     {value}
                 </Typography>

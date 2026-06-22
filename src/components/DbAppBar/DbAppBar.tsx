@@ -21,9 +21,9 @@ import { Tooltip } from '@mui/material';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  backgroundColor: alpha(theme.palette.common.black, 0.15),
   '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(theme.palette.common.black, 0.25),
   },
   marginLeft: 0,
   width: '100%',
@@ -113,7 +113,7 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
 
   return (
     <Box sx={sx}>
-      <AppBar position="static">
+      <AppBar color='default' variant='elevation' position="static">
         <Toolbar>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -153,58 +153,25 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
             </Menu>
           </Box>
 
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            onClick={() => handleNavigate('/')}
+          <Box
             sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              cursor: 'pointer',
+              width: 128,
             }}
-          >
-            LOGO
-          </Typography>
-
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, ml: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            onClick={() => handleNavigate('/')}
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.2rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              cursor: 'pointer',
-              fontSize: '1.1rem',
-            }}
-          >
-            LOGO
-          </Typography>
+            src="/logo.png"
+            alt="Logo"
+            component='img'
+          />
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, ml: 2, gap: 1 }}>
             <Button
               onClick={() => handleNavigate('/')}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, display: 'block' }}
             >
               Início
             </Button>
             <Button
               onClick={() => handleNavigate('/deputados')}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, display: 'block' }}
             >
               Deputados
             </Button>
