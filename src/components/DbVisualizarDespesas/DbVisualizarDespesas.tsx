@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Box,
     Typography,
@@ -14,6 +14,7 @@ import DepudadosAPI from '@/services/DepudadosAPI';
 import { formatCurrency } from '@/utils';
 import { DbEmptyState } from '@/components/DbEmptyState';
 import { OpenInNew } from '@mui/icons-material';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 import type { Despesa } from '@/types';
 import type { ResumoGastos } from '@/types/Deputado';
@@ -30,21 +31,7 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
     const [hasMoreDespesas, setHasMoreDespesas] = useState<boolean>(true);
     const [loadingDespesas, setLoadingDespesas] = useState<boolean>(false);
     const [descricao, setDescricao] = useState<string | undefined>();
-    const observerRef = useRef<IntersectionObserver | null>(null);
-
-    const lastDespesaElementRef = useCallback(
-        (node: HTMLDivElement | null) => {
-            if (loadingDespesas) return;
-            if (observerRef.current) observerRef.current.disconnect();
-            observerRef.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasMoreDespesas) {
-                    setPageDespesas((prevPage) => prevPage + 1);
-                }
-            });
-            if (node) observerRef.current.observe(node);
-        },
-        [loadingDespesas, hasMoreDespesas]
-    );
+    const lastDespesaElementRef = useInfiniteScroll(loadingDespesas, hasMoreDespesas, () => setPageDespesas((prevPage) => prevPage + 1));
 
     const fetchDespesasData = async () => {
         setLoadingDespesas(true);

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Box,
     Typography,
@@ -16,6 +16,8 @@ import {
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { DbEmptyState } from '@/components/DbEmptyState';
 import { OpenInNew, Search } from '@mui/icons-material';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { useDebounce } from '@/hooks/useDebounce';
 
 import type { Proposicao } from '@/types';
 import type { ResumoProposicoes } from '@/types/Deputado';
@@ -33,31 +35,8 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [siglaTipo, setSiglaTipo] = useState<string | undefined>();
     const [ementa, setEmenta] = useState<string>('');
-    const [debouncedEmenta, setDebouncedEmenta] = useState<string>('');
-
-    const observerRef = useRef<IntersectionObserver | null>(null);
-
-    const lastElementRef = useCallback(
-        (node: HTMLDivElement | null) => {
-            if (loading) return;
-            if (observerRef.current) observerRef.current.disconnect();
-            observerRef.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasMore) {
-                    setPage((prevPage) => prevPage + 1);
-                }
-            });
-            if (node) observerRef.current.observe(node);
-        },
-        [loading, hasMore]
-    );
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedEmenta(ementa);
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [ementa]);
+    const debouncedEmenta = useDebounce(ementa, 500);
+    const lastElementRef = useInfiniteScroll(loading, hasMore, () => setPage((prevPage) => prevPage + 1));
 
     const fetchInitialData = async () => {
         setLoading(true);
