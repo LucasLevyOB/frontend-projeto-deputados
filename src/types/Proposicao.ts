@@ -7,4 +7,6 @@ export interface Proposicao {
     dataApresentacao: string;
     urlInteiroTeor?: string;
     temas?: string[];
+    tipoSituacaoProposicao?: string;
+    titulo?: string;
 }

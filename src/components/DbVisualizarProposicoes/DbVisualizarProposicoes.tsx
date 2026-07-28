@@ -160,7 +160,7 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                                             primary={
                                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
                                                     <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                                                        {proposicao.siglaTipo} {proposicao.numero}/{proposicao.ano}
+                                                        {proposicao.titulo}
                                                     </Typography>
                                                     {proposicao.urlInteiroTeor && (
                                                         <Link href={proposicao.urlInteiroTeor} target="_blank" sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
@@ -186,8 +186,11 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                                                             ))}
                                                         </Box>
                                                     )}
+                                                    <Typography component="span" variant="caption" color="text.disabled" sx={{ mt: 1, display: 'block' }}>
+                                                        <strong>Status Atual:</strong> {proposicao.tipoSituacaoProposicao ?? "Sem Status"}
+                                                    </Typography>
                                                     <Typography component="span" variant="caption" color="text.disabled" sx={{ mt: 0.5, display: 'block' }}>
-                                                        Apresentação:{' '}
+                                                        <strong>Apresentação:</strong>{' '}
                                                         {new Date(proposicao.dataApresentacao).toLocaleDateString(
                                                             'pt-BR',
                                                             { timeZone: 'UTC' }
