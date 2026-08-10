@@ -12,12 +12,14 @@ import {
 import { useParams, useNavigate } from 'react-router-dom';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import type { SelectChangeEvent } from '@mui/material';
-import type { Deputado } from '@/types';
-
 import { VisaoGeralTab } from './components/VisaoGeralTab';
 import { DespesasTab } from './components/DespesasTab';
 import { ProposicoesTab } from './components/ProposicoesTab';
+import { VotacoesTab } from './components/VotacoesTab';
+
+import type { SelectChangeEvent } from '@mui/material';
+import type { Deputado } from '@/types';
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -94,8 +96,8 @@ const DeputadoDetalhes = () => {
       }}
     >
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start', mb: -1 }}>
-        <Button 
-          startIcon={<ArrowBackIcon />} 
+        <Button
+          startIcon={<ArrowBackIcon />}
           onClick={() => navigate(-1)}
           color="inherit"
           variant="text"
@@ -198,6 +200,7 @@ const DeputadoDetalhes = () => {
             <Tab label="Visão Geral" {...a11yProps(0)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
             <Tab label="Cota Parlamentar" {...a11yProps(1)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
             <Tab label="Proposições" {...a11yProps(2)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
+            <Tab label="Votações" {...a11yProps(3)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
           </Tabs>
         </Box>
 
@@ -219,6 +222,9 @@ const DeputadoDetalhes = () => {
             resumoProposicoes={deputado.resumoProposicoes}
             handleChangeYear={handleChangeYear}
           />
+        </CustomTabPanel>
+        <CustomTabPanel value={tabValue} index={3}>
+          <VotacoesTab id={Number(id)} />
         </CustomTabPanel>
       </Box>
     </Box>
