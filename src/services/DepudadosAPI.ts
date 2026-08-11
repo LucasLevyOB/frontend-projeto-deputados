@@ -131,13 +131,18 @@ export default class DepudadosAPI {
   public getVotacoesDeputado = async (
     id: number,
     page: number = 1,
-    limit: number = 20
+    limit: number = 20,
+    ementa?: string
   ): Promise<PagedResponse<Votacao>> => {
     try {
       const params = new URLSearchParams({
         page: page.toString(),
         limit: limit.toString(),
       });
+
+      if (ementa) {
+        params.append('ementa', ementa);
+      }
 
       const response = await this.request.get(
         `/deputados/${id}/votacoes?${params.toString()}`

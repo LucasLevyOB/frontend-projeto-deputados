@@ -9,11 +9,14 @@ import {
     CircularProgress,
     Chip,
     Link,
+    TextField,
+    InputAdornment,
 } from '@mui/material';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { DbEmptyState } from '@/components/DbEmptyState';
-import { OpenInNew } from '@mui/icons-material';
+import { OpenInNew, Search } from '@mui/icons-material';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { useDebounce } from '@/hooks/useDebounce';
 
 import type { Votacao } from '@/types';
 
@@ -26,6 +29,8 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
     const [page, setPage] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
+    const [ementa, setEmenta] = useState<string>('');
+    const debouncedEmenta = useDebounce(ementa, 500);
     const lastElementRef = useInfiniteScroll(loading, hasMore, () => setPage((prevPage) => prevPage + 1));
 
     const fetchInitialData = async () => {
@@ -34,7 +39,8 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
         const response = await api.getVotacoesDeputado(
             Number(id),
             1,
-            20
+            20,
+            debouncedEmenta
         );
         setVotacoes(response.data);
         setPage(1);
@@ -48,7 +54,8 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
         const response = await api.getVotacoesDeputado(
             Number(id),
             page,
-            20
+            20,
+            debouncedEmenta
         );
         setVotacoes((prev) => [...prev, ...response.data]);
         setHasMore(page < response.totalPages);
@@ -59,7 +66,7 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
         if (id) {
             fetchInitialData();
         }
-    }, [id]);
+    }, [id, debouncedEmenta]);
 
     useEffect(() => {
         if (id && page > 1) {
@@ -79,6 +86,26 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
             <Typography variant="h5" sx={{ mb: 2 }}>
                 Votações Recentes
             </Typography>
+
+            <Box sx={{ mb: 3 }}>
+                <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Buscar por proposição..."
+                    value={ementa}
+                    onChange={(e) => setEmenta(e.target.value)}
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        }
+                    }}
+                    size="small"
+                />
+            </Box>
 
             {votacoes.length === 0 && !loading ? (
                 <DbEmptyState
