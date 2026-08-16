@@ -8,6 +8,13 @@ export interface EstatisticasDeputado {
     temasProposicoes?: Array<{ tema: string; quantidade: number }>;
 }
 
+export interface ResumoPresencas {
+    totalSessoes: number;
+    presencas: number;
+    ausencias: number;
+    percentualPresenca: number;
+}
+
 export interface ResumoGastos {
     ano: number;
     totalGastos: number;
@@ -43,6 +50,7 @@ export interface Deputado {
     estatisticas: EstatisticasDeputado;
     resumoGastos?: ResumoGastos[];
     resumoProposicoes?: ResumoProposicoes[];
+    resumoPresencas?: ResumoPresencas;
     siglaPartido: string;
     siglaUf: string;
     situacao: string;

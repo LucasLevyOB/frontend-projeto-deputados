@@ -148,6 +148,43 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
         )}
       </Grid>
 
+      {deputado.resumoPresencas && (
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
+            Presença em Plenário
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <StatCard
+                title="Percentual de Presença"
+                value={`${deputado.resumoPresencas.percentualPresenca.toFixed(1)}%`}
+                color={deputado.resumoPresencas.percentualPresenca >= 70 ? 'success.main' : 'warning.main'}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <StatCard
+                title="Total de Sessões"
+                value={deputado.resumoPresencas.totalSessoes}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <StatCard
+                title="Presenças"
+                value={deputado.resumoPresencas.presencas}
+                color="primary.main"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <StatCard
+                title="Ausências"
+                value={deputado.resumoPresencas.ausencias}
+                color="error.main"
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      )}
+
       {deputado.estatisticas?.temasProposicoes && deputado.estatisticas.temasProposicoes.length > 0 && (
         <Grid size={{ xs: 12 }}>
           <Typography variant="h5" sx={{ mt: 2, mb: 2, fontWeight: 'bold' }}>
