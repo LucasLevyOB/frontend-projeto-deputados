@@ -35,7 +35,10 @@ export const StatCard = ({
       >
         {title}
       </Typography>
-      <Typography variant="h5" color={color} sx={{ fontWeight: 'bold' }}>
+      <Typography
+        variant="h5"
+        sx={{ fontWeight: 'bold', color }}
+      >
         {value}
       </Typography>
     </CardContent>

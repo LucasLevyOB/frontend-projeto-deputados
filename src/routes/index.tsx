@@ -3,6 +3,7 @@ import { Home } from '@/pages/Home';
 import { RootLayout } from '@/layouts/RootLayout';
 import { DeputadoDetalhes } from '@/pages/DeputadoDetalhes';
 import { Deputados } from '@/pages/Deputados';
+import { ComparacaoDeputados } from '@/pages/ComparacaoDeputados';
 
 export const router = createBrowserRouter([
   {
@@ -18,9 +19,14 @@ export const router = createBrowserRouter([
         element: <Deputados />,
       },
       {
+        path: 'comparar',
+        element: <ComparacaoDeputados />,
+      },
+      {
         path: 'deputado/:id',
         element: <DeputadoDetalhes />,
       },
     ],
   },
 ]);
+

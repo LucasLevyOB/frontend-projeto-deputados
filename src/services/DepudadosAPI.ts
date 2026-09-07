@@ -1,4 +1,4 @@
-import type { Deputado, PagedResponse, Despesa, Proposicao, Votacao } from '@/types';
+import type { Deputado, DeputadoResumo, PagedResponse, Despesa, Proposicao, Votacao, VotacaoComparadaItem } from '@/types';
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3001';
@@ -34,6 +34,38 @@ export default class DepudadosAPI {
       return response.data;
     } catch (error) {
       console.error('Error fetching deputies:', error);
+      return {
+        data: [],
+        total: 0,
+        page: 0,
+        limit: 0,
+        totalPages: 0,
+      };
+    }
+  };
+
+  public buscarDeputados = async (
+    nome?: string,
+    page: number = 1,
+    limit: number = 10,
+    uf?: string,
+    siglaPartido?: string
+  ): Promise<PagedResponse<DeputadoResumo>> => {
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+      });
+      if (nome) params.append('nome', nome);
+      if (uf) params.append('uf', uf);
+      if (siglaPartido) params.append('siglaPartido', siglaPartido);
+
+      const response = await this.request.get(
+        `/deputados/busca?${params.toString()}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error searching deputies:', error);
       return {
         data: [],
         total: 0,
@@ -155,6 +187,45 @@ export default class DepudadosAPI {
         total: 0,
         page: 0,
         limit: 0,
+        totalPages: 0,
+      };
+    }
+  };
+
+  public getVotacoesComparadas = async (
+    idDeputado1?: number | string,
+    idDeputado2?: number | string,
+    page: number = 1,
+    limit: number = 5,
+    ementa?: string
+  ): Promise<PagedResponse<VotacaoComparadaItem>> => {
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+      });
+
+      if (idDeputado1 != null) {
+        params.append('deputado1', idDeputado1.toString());
+      }
+      if (idDeputado2 != null) {
+        params.append('deputado2', idDeputado2.toString());
+      }
+      if (ementa) {
+        params.append('ementa', ementa);
+      }
+
+      const response = await this.request.get(
+        `/votacoes/comparar?${params.toString()}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar votações comparadas:', error);
+      return {
+        data: [],
+        total: 0,
+        page: 1,
+        limit,
         totalPages: 0,
       };
     }

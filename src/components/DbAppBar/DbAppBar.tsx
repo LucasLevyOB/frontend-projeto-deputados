@@ -9,7 +9,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -150,6 +149,9 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
               <MenuItem onClick={() => handleNavigate('/deputados')}>
                 <Typography sx={{ textAlign: 'center' }}>Deputados</Typography>
               </MenuItem>
+              <MenuItem onClick={() => handleNavigate('/comparar')}>
+                <Typography sx={{ textAlign: 'center' }}>Comparar</Typography>
+              </MenuItem>
             </Menu>
           </Box>
 
@@ -174,6 +176,12 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Deputados
+            </Button>
+            <Button
+              onClick={() => handleNavigate('/comparar')}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Comparar
             </Button>
           </Box>
 

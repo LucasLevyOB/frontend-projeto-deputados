@@ -62,3 +62,14 @@ export interface Votacao {
     votacao_: DetalheVotacao;
     proposicao_?: ProposicaoVotacao;
 }
+
+export interface VotacaoComparadaItem {
+    idVotacao: string;
+    idProposicao?: number;
+    siglaNumeroAno: string;
+    tituloResumo: string;
+    ementaCompleta?: string;
+    dataHoraVotacao?: string;
+    votoDeputado1?: string | null;
+    votoDeputado2?: string | null;
+}

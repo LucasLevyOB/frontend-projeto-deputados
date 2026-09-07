@@ -68,3 +68,11 @@ export interface Deputado {
     escolaridade: string | null;
     urlRedeSocial: string[] | null;
 }
+
+export interface DeputadoResumo {
+    _id: number;
+    nome: string;
+    urlFoto: string;
+    siglaPartido: string;
+    siglaUf: string;
+}
