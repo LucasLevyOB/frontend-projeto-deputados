@@ -146,7 +146,6 @@ export const ComparacaoVotacoes = ({
                   maxWidth: 700,
                 }}
               >
-                {/* Voto Deputado 1 */}
                 <Box
                   sx={{
                     flex: 1,
@@ -174,7 +173,6 @@ export const ComparacaoVotacoes = ({
                   )}
                 </Box>
 
-                {/* Card Central da Proposição com Tooltip */}
                 <Tooltip
                   title={item.ementaCompleta || item.tituloResumo}
                   arrow
@@ -222,7 +220,6 @@ export const ComparacaoVotacoes = ({
                   </Card>
                 </Tooltip>
 
-                {/* Voto Deputado 2 */}
                 <Box
                   sx={{
                     flex: 1,
@@ -254,7 +251,6 @@ export const ComparacaoVotacoes = ({
           })
         )}
 
-        {/* Paginação */}
         {totalPaginas > 1 && (
           <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
             <Pagination

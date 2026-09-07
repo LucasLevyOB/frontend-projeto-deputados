@@ -67,7 +67,6 @@ export const ComparacaoDeputados = () => {
         py: 4,
       }}
     >
-      {/* Título da Página */}
       <Typography
         variant="h5"
         component="h1"
@@ -81,7 +80,6 @@ export const ComparacaoDeputados = () => {
         Comparação de Deputados (2023-2026)
       </Typography>
 
-      {/* Cards de Seleção Superior */}
       <Box
         sx={{
           display: 'flex',
@@ -108,7 +106,6 @@ export const ComparacaoDeputados = () => {
         />
       </Box>
 
-      {/* Conteúdo: EmptyState ou Seções de Comparação */}
       {nenhumSelecionado ? (
         <Box sx={{ mt: 4 }}>
           <DbEmptyState
