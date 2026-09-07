@@ -87,7 +87,7 @@ export const ComparacaoTemas = ({
   };
 
   return (
-    <Box sx={{ width: '100%', my: 3 }}>
+    <Box sx={{ width: '100%', my: 4 }}>
       <Typography
         variant="h6"
         sx={{ textAlign: 'center', mb: 3, fontWeight: 'bold', color: 'text.secondary' }}
@@ -99,7 +99,7 @@ export const ComparacaoTemas = ({
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          gap: { xs: 2, md: 8 },
+          gap: { xs: 4, sm: 8, md: 12 },
           width: '100%',
         }}
       >

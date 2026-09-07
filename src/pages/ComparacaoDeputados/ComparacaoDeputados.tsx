@@ -88,9 +88,9 @@ export const ComparacaoDeputados = () => {
           flexDirection: { xs: 'column', sm: 'row' },
           justifyContent: 'center',
           alignItems: 'center',
-          gap: { xs: 3, sm: 4 },
+          gap: { xs: 4, sm: 5, md: 6 },
           width: '100%',
-          mb: 4,
+          mb: 5,
         }}
       >
         <DeputadoSelectorCard

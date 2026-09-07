@@ -106,7 +106,7 @@ export const ComparacaoVotacoes = ({
   };
 
   return (
-    <Box sx={{ width: '100%', my: 3 }}>
+    <Box sx={{ width: '100%', my: 4 }}>
       <Typography
         variant="h6"
         sx={{ textAlign: 'center', mb: 3, fontWeight: 'bold', color: 'text.secondary' }}
