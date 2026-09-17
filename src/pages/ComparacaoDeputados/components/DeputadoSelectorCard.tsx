@@ -27,18 +27,20 @@ export const DeputadoSelectorCard = ({
     <Card
       sx={{
         width: '100%',
-        maxWidth: 380,
-        height: 220,
+        maxWidth: { xs: '100%', sm: 380 },
+        height: { xs: 80, sm: 220 },
         borderRadius: 3,
         boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
         border: '1px solid',
         borderColor: 'divider',
         position: 'relative',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: { xs: 'row', sm: 'column' },
+        justifyContent: { xs: 'flex-start', sm: 'center' },
         alignItems: 'center',
-        p: 2,
+        p: { xs: 1, sm: 2 },
+        gap: { xs: 1.5, sm: 0 },
+        overflow: 'hidden',
       }}
     >
       {deputado ? (
@@ -49,22 +51,25 @@ export const DeputadoSelectorCard = ({
             aria-label="Remover deputado"
             sx={{
               position: 'absolute',
-              top: 12,
-              right: 12,
+              top: { xs: 4, sm: 12 },
+              right: { xs: 4, sm: 12 },
+              p: { xs: 0.5, sm: 1 },
               color: 'text.secondary',
               '&:hover': { color: 'text.primary' },
+              zIndex: 1,
             }}
           >
-            <CloseIcon fontSize="small" />
+            <CloseIcon sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }} />
           </IconButton>
 
           <Avatar
             src={deputado.urlFoto}
             alt={deputado.nome}
             sx={{
-              width: 88,
-              height: 88,
-              mb: 1.5,
+              width: { xs: 52, sm: 88 },
+              height: { xs: 52, sm: 88 },
+              mb: { xs: 0, sm: 1.5 },
+              flexShrink: 0,
               bgcolor: 'grey.300',
               boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
             }}
@@ -72,30 +77,57 @@ export const DeputadoSelectorCard = ({
             {deputado.nome.substring(0, 2).toUpperCase()}
           </Avatar>
 
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: { xs: 'flex-start', sm: 'center' },
+              textAlign: { xs: 'left', sm: 'center' },
+              pr: { xs: 3.5, sm: 0 },
+              minWidth: 0,
+              flex: 1,
+            }}
           >
-            {deputado.nome}
-          </Typography>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 'bold',
+                fontSize: { xs: '0.8rem', sm: '1rem' },
+                lineHeight: { xs: 1.15, sm: 1.2 },
+                wordBreak: 'break-word',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {deputado.nome}
+            </Typography>
 
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ mt: 0.5, textAlign: 'center' }}
-          >
-            {deputado.siglaPartido} - {deputado.siglaUf}
-          </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                mt: { xs: 0.25, sm: 0.5 },
+                fontSize: { xs: '0.7rem', sm: '0.875rem' },
+                lineHeight: 1.1,
+              }}
+            >
+              {deputado.siglaPartido} - {deputado.siglaUf}
+            </Typography>
+          </Box>
         </>
       ) : (
         <CardContent
           sx={{
             width: '100%',
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'center',
             alignItems: 'center',
-            p: 0,
-            '&:last-child': { pb: 0 },
+            p: { xs: 0.5, sm: 0 },
+            '&:last-child': { pb: { xs: 0.5, sm: 0 } },
           }}
         >
           <Box
@@ -105,14 +137,17 @@ export const DeputadoSelectorCard = ({
               borderRadius: '50%',
               bgcolor: 'grey.300',
               mb: 2,
+              display: { xs: 'none', sm: 'block' },
             }}
           />
 
-          <DeputadoAutocomplete
-            onSelect={onSelect}
-            loading={loading}
-            placeholder="Buscar Deputado"
-          />
+          <Box sx={{ width: '100%' }}>
+            <DeputadoAutocomplete
+              onSelect={onSelect}
+              loading={loading}
+              placeholder="Buscar Deputado"
+            />
+          </Box>
         </CardContent>
       )}
     </Card>

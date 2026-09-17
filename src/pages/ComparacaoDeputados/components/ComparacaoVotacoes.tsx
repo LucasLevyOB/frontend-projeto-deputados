@@ -73,17 +73,25 @@ export const ComparacaoVotacoes = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: { xs: 1.5, sm: 3 },
+            gap: { xs: 1, sm: 3 },
             width: '100%',
             maxWidth: 700,
           }}
         >
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-            <Skeleton variant="rounded" width={80} height={32} sx={{ borderRadius: 4 }} />
+            <Skeleton
+              variant="rounded"
+              sx={{
+                width: { xs: 56, sm: 80 },
+                height: 32,
+                borderRadius: 4,
+              }}
+            />
           </Box>
           <Card
             sx={{
-              width: { xs: 180, sm: 240 },
+              width: { xs: 155, sm: 240 },
+              minHeight: { xs: 110, sm: 80 },
               borderRadius: 2,
               border: '1px solid',
               borderColor: 'divider',
@@ -94,10 +102,18 @@ export const ComparacaoVotacoes = ({
             <CardContent sx={{ p: '8px 12px !important' }}>
               <Skeleton variant="text" width="60%" sx={{ mx: 'auto' }} />
               <Skeleton variant="text" width="90%" sx={{ mx: 'auto', mt: 0.5 }} />
+              <Skeleton variant="text" width="80%" sx={{ mx: 'auto', mt: 0.5 }} />
             </CardContent>
           </Card>
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
-            <Skeleton variant="rounded" width={80} height={32} sx={{ borderRadius: 4 }} />
+            <Skeleton
+              variant="rounded"
+              sx={{
+                width: { xs: 56, sm: 80 },
+                height: 32,
+                borderRadius: 4,
+              }}
+            />
           </Box>
         </Box>
       );
@@ -141,7 +157,7 @@ export const ComparacaoVotacoes = ({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: { xs: 1.5, sm: 3 },
+                  gap: { xs: 1, sm: 3 },
                   width: '100%',
                   maxWidth: 700,
                 }}
@@ -158,17 +174,20 @@ export const ComparacaoVotacoes = ({
                       label={item.votoDeputado1 || 'Sem Voto'}
                       color={corVoto1}
                       sx={{
-                        minWidth: 80,
+                        minWidth: { xs: 56, sm: 80 },
+                        px: { xs: 0.5, sm: 1 },
                         fontWeight: 'bold',
-                        fontSize: '0.85rem',
+                        fontSize: { xs: '0.75rem', sm: '0.85rem' },
                       }}
                     />
                   ) : (
                     <Skeleton
                       variant="rounded"
-                      width={80}
-                      height={32}
-                      sx={{ borderRadius: 4 }}
+                      sx={{
+                        width: { xs: 56, sm: 80 },
+                        height: 32,
+                        borderRadius: 4,
+                      }}
                     />
                   )}
                 </Box>
@@ -180,12 +199,16 @@ export const ComparacaoVotacoes = ({
                 >
                   <Card
                     sx={{
-                      width: { xs: 180, sm: 240 },
+                      width: { xs: 155, sm: 240 },
+                      minHeight: { xs: 110, sm: 80 },
                       borderRadius: 2,
                       boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
                       border: '1px solid',
                       borderColor: 'divider',
                       textAlign: 'center',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
                       py: 1,
                       cursor: 'pointer',
                       transition: 'transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
@@ -195,10 +218,14 @@ export const ComparacaoVotacoes = ({
                       },
                     }}
                   >
-                    <CardContent sx={{ p: '8px 12px !important' }}>
+                    <CardContent sx={{ p: { xs: '6px 8px !important', sm: '8px 12px !important' } }}>
                       <Typography
                         variant="subtitle2"
-                        sx={{ fontWeight: 'bold', lineHeight: 1.2 }}
+                        sx={{
+                          fontWeight: 'bold',
+                          lineHeight: 1.2,
+                          fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                        }}
                       >
                         {item.siglaNumeroAno}
                       </Typography>
@@ -207,11 +234,12 @@ export const ComparacaoVotacoes = ({
                         color="text.secondary"
                         sx={{
                           display: '-webkit-box',
-                          WebkitLineClamp: 2,
+                          WebkitLineClamp: { xs: 5, sm: 3 },
                           WebkitBoxOrient: 'vertical',
                           overflow: 'hidden',
                           mt: 0.5,
-                          lineHeight: 1.3,
+                          fontSize: { xs: '0.68rem', sm: '0.75rem' },
+                          lineHeight: 1.25,
                         }}
                       >
                         {item.tituloResumo}
@@ -232,17 +260,20 @@ export const ComparacaoVotacoes = ({
                       label={item.votoDeputado2 || 'Sem Voto'}
                       color={corVoto2}
                       sx={{
-                        minWidth: 80,
+                        minWidth: { xs: 56, sm: 80 },
+                        px: { xs: 0.5, sm: 1 },
                         fontWeight: 'bold',
-                        fontSize: '0.85rem',
+                        fontSize: { xs: '0.75rem', sm: '0.85rem' },
                       }}
                     />
                   ) : (
                     <Skeleton
                       variant="rounded"
-                      width={80}
-                      height={32}
-                      sx={{ borderRadius: 4 }}
+                      sx={{
+                        width: { xs: 56, sm: 80 },
+                        height: 32,
+                        borderRadius: 4,
+                      }}
                     />
                   )}
                 </Box>

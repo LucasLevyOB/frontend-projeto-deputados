@@ -1,4 +1,4 @@
-import { Box, Typography, Chip, Skeleton } from '@mui/material';
+import { Box, Typography, Chip, Skeleton, Divider } from '@mui/material';
 import { formatCurrency } from '@/utils';
 import { extrairPrincipaisGastos } from '../utils/comparacaoUtils';
 import type { Deputado } from '@/types';
@@ -71,13 +71,14 @@ export const ComparacaoGastos = ({
               title={labelCompleto}
               variant="outlined"
               label={
-                <Box sx={{ py: 0.5, textAlign: 'center' }}>
+                <Box sx={{ py: { xs: 0.25, sm: 0.5 }, textAlign: 'center' }}>
                   <Typography
                     variant="caption"
                     sx={{
                       display: 'block',
                       fontWeight: 500,
-                      lineHeight: 1.25,
+                      fontSize: { xs: '0.68rem', sm: '0.75rem' },
+                      lineHeight: 1.2,
                       color: 'text.secondary',
                     }}
                   >
@@ -88,6 +89,7 @@ export const ComparacaoGastos = ({
                     sx={{
                       fontWeight: 'bold',
                       color: 'text.primary',
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' },
                       mt: 0.25,
                       lineHeight: 1.2,
                     }}
@@ -100,8 +102,8 @@ export const ComparacaoGastos = ({
                 width: '100%',
                 maxWidth: 280,
                 height: 'auto',
-                py: 0.5,
-                px: 1,
+                py: { xs: 0.25, sm: 0.5 },
+                px: { xs: 0.5, sm: 1 },
                 borderRadius: 2.5,
                 borderColor: 'divider',
                 bgcolor: 'background.paper',
@@ -132,12 +134,20 @@ export const ComparacaoGastos = ({
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          gap: { xs: 4, sm: 8, md: 12 },
+          alignItems: 'stretch',
+          gap: { xs: 1.5, sm: 4, md: 6 },
           width: '100%',
         }}
       >
-        {renderSlotGastos(deputado1, gastos1)}
-        {renderSlotGastos(deputado2, gastos2)}
+        <Box sx={{ flex: 1, maxWidth: 280, minWidth: 0, display: 'flex', justifyContent: 'center' }}>
+          {renderSlotGastos(deputado1, gastos1)}
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box sx={{ flex: 1, maxWidth: 280, minWidth: 0, display: 'flex', justifyContent: 'center' }}>
+          {renderSlotGastos(deputado2, gastos2)}
+        </Box>
       </Box>
     </Box>
   );

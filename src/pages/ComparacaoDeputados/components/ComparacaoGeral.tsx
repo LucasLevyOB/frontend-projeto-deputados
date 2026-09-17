@@ -1,6 +1,6 @@
-import { Box, Typography, Skeleton } from '@mui/material';
+import { Box, Typography, Skeleton, Card, useTheme, useMediaQuery } from '@mui/material';
 import { StatCard } from '@/pages/DeputadoDetalhes/components/StatCard';
-import { formatCurrency } from '@/utils';
+import { formatCurrency, formatCompactCurrency } from '@/utils';
 import { determinarVencedor } from '../utils/comparacaoUtils';
 import type { Deputado } from '@/types';
 
@@ -13,6 +13,8 @@ export const ComparacaoGeral = ({
   deputado1,
   deputado2,
 }: ComparacaoGeralProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const ambosSelecionados = Boolean(deputado1 && deputado2);
 
   const stats1 = deputado1?.estatisticas;
@@ -46,6 +48,88 @@ export const ComparacaoGeral = ({
 
   const corGastos1 = ambosSelecionados && resGastos.dep1Melhor ? 'primary.main' : 'text.primary';
   const corGastos2 = ambosSelecionados && resGastos.dep2Melhor ? 'primary.main' : 'text.primary';
+
+  const renderMobileVsCard = (
+    titulo: string,
+    val1: string | number,
+    val2: string | number,
+    cor1: string,
+    cor2: string,
+    carregando1: boolean,
+    carregando2: boolean
+  ) => {
+    return (
+      <Card
+        sx={{
+          width: '100%',
+          maxWidth: 320,
+          borderRadius: 3,
+          boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+          border: '1px solid',
+          borderColor: 'divider',
+          py: 2,
+          px: 3,
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="caption"
+          sx={{
+            display: 'block',
+            fontWeight: 700,
+            color: 'text.secondary',
+            letterSpacing: '0.5px',
+            textTransform: 'uppercase',
+            mb: 1,
+          }}
+        >
+          {titulo}
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 2,
+          }}
+        >
+          {carregando1 ? (
+            <Skeleton variant="text" width={50} height={32} />
+          ) : (
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 800, color: cor1 }}
+            >
+              {val1}
+            </Typography>
+          )}
+
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 600,
+              color: 'text.disabled',
+              textTransform: 'lowercase',
+            }}
+          >
+            vs
+          </Typography>
+
+          {carregando2 ? (
+            <Skeleton variant="text" width={50} height={32} />
+          ) : (
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 800, color: cor2 }}
+            >
+              {val2}
+            </Typography>
+          )}
+        </Box>
+      </Card>
+    );
+  };
 
   const renderSlotMetricas = (
     deputado: Deputado | null,
@@ -110,26 +194,76 @@ export const ComparacaoGeral = ({
         Geral
       </Typography>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: { xs: 4, sm: 8, md: 12 },
-          width: '100%',
-        }}
-      >
-        {renderSlotMetricas(
-          deputado1,
-          { score: corScore1, pls: corPls1, outras: corOutras1, gastos: corGastos1 },
-          { score: score1, pls: pls1, outras: outras1, gastos: gastos1 }
-        )}
+      {isMobile ? (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 2.5,
+            width: '100%',
+          }}
+        >
+          {renderMobileVsCard(
+            'Score Eficiência',
+            score1,
+            score2,
+            corScore1,
+            corScore2,
+            !deputado1,
+            !deputado2
+          )}
+          {renderMobileVsCard(
+            'Projetos de Lei',
+            pls1,
+            pls2,
+            corPls1,
+            corPls2,
+            !deputado1,
+            !deputado2
+          )}
+          {renderMobileVsCard(
+            'Outras Proposições',
+            outras1,
+            outras2,
+            corOutras1,
+            corOutras2,
+            !deputado1,
+            !deputado2
+          )}
+          {renderMobileVsCard(
+            'Gastos',
+            formatCompactCurrency(gastos1),
+            formatCompactCurrency(gastos2),
+            corGastos1,
+            corGastos2,
+            !deputado1,
+            !deputado2
+          )}
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: { xs: 4, sm: 8, md: 12 },
+            width: '100%',
+          }}
+        >
+          {renderSlotMetricas(
+            deputado1,
+            { score: corScore1, pls: corPls1, outras: corOutras1, gastos: corGastos1 },
+            { score: score1, pls: pls1, outras: outras1, gastos: gastos1 }
+          )}
 
-        {renderSlotMetricas(
-          deputado2,
-          { score: corScore2, pls: corPls2, outras: corOutras2, gastos: corGastos2 },
-          { score: score2, pls: pls2, outras: outras2, gastos: gastos2 }
-        )}
-      </Box>
+          {renderSlotMetricas(
+            deputado2,
+            { score: corScore2, pls: corPls2, outras: corOutras2, gastos: corGastos2 },
+            { score: score2, pls: pls2, outras: outras2, gastos: gastos2 }
+          )}
+        </Box>
+      )}
     </Box>
   );
 };
+

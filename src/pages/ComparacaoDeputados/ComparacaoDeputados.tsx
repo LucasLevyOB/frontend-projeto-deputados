@@ -82,28 +82,38 @@ export const ComparacaoDeputados = () => {
 
       <Box
         sx={{
+          position: { xs: 'sticky', sm: 'static' },
+          top: { xs: 68, sm: 'auto' },
+          zIndex: 10,
+          bgcolor: 'background.default',
+          py: { xs: 0, sm: 2 },
+          pt: { xs: .5, sm: 2 },
           display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
+          flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: { xs: 4, sm: 5, md: 6 },
+          gap: { xs: 1.5, sm: 4, md: 6 },
           width: '100%',
-          mb: 5,
+          mb: { xs: 2, sm: 4 },
         }}
       >
-        <DeputadoSelectorCard
-          deputado={deputado1}
-          onSelect={handleSelectDeputado1}
-          onClear={handleClearDeputado1}
-          loading={loading1}
-        />
+        <Box sx={{ flex: 1, maxWidth: 380, minWidth: 0, display: 'flex', justifyContent: 'center' }}>
+          <DeputadoSelectorCard
+            deputado={deputado1}
+            onSelect={handleSelectDeputado1}
+            onClear={handleClearDeputado1}
+            loading={loading1}
+          />
+        </Box>
 
-        <DeputadoSelectorCard
-          deputado={deputado2}
-          onSelect={handleSelectDeputado2}
-          onClear={handleClearDeputado2}
-          loading={loading2}
-        />
+        <Box sx={{ flex: 1, maxWidth: 380, minWidth: 0, display: 'flex', justifyContent: 'center' }}>
+          <DeputadoSelectorCard
+            deputado={deputado2}
+            onSelect={handleSelectDeputado2}
+            onClear={handleClearDeputado2}
+            loading={loading2}
+          />
+        </Box>
       </Box>
 
       {nenhumSelecionado ? (

@@ -1,4 +1,4 @@
-import { Box, Typography, Chip, Skeleton } from '@mui/material';
+import { Box, Typography, Chip, Skeleton, Divider } from '@mui/material';
 import { extrairPrincipaisTemas } from '../utils/comparacaoUtils';
 import type { Deputado } from '@/types';
 
@@ -60,7 +60,6 @@ export const ComparacaoTemas = ({
         }}
       >
         {temas.map((tema, index) => {
-
           return (
             <Chip
               key={index}
@@ -71,6 +70,7 @@ export const ComparacaoTemas = ({
               sx={{
                 maxWidth: '100%',
                 fontWeight: 500,
+                fontSize: { xs: '0.75rem', sm: '0.8125rem' },
                 borderColor: 'divider',
                 bgcolor: 'background.paper',
                 '& .MuiChip-label': {
@@ -99,12 +99,20 @@ export const ComparacaoTemas = ({
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          gap: { xs: 4, sm: 8, md: 12 },
+          alignItems: 'stretch',
+          gap: { xs: 1.5, sm: 4, md: 6 },
           width: '100%',
         }}
       >
-        {renderSlotTemas(deputado1, temas1)}
-        {renderSlotTemas(deputado2, temas2)}
+        <Box sx={{ flex: 1, maxWidth: 280, minWidth: 0, display: 'flex', justifyContent: 'center' }}>
+          {renderSlotTemas(deputado1, temas1)}
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box sx={{ flex: 1, maxWidth: 280, minWidth: 0, display: 'flex', justifyContent: 'center' }}>
+          {renderSlotTemas(deputado2, temas2)}
+        </Box>
       </Box>
     </Box>
   );
