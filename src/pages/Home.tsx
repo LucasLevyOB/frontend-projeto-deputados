@@ -59,7 +59,7 @@ export const Home = () => {
       >
         <Container maxWidth="md">
           <ShieldIcon sx={{ fontSize: 80, mb: 2, opacity: 0.9 }} />
-          <Typography variant="h2" component="h1" gutterBottom sx={{ fontSize: { xs: '2.5rem', md: '3.75rem' }, fontWeight: 'bold' }}>
+          <Typography variant="h2" component="h1" gutterBottom sx={{ fontSize: { xs: '2rem', md: '3.75rem' }, fontWeight: 'bold' }}>
             DepuDados - Transparência e Acompanhamento Legislativo
           </Typography>
           <Typography variant="h5" component="p" sx={{ mb: 4, opacity: 0.9, fontWeight: 300, lineHeight: 1.6 }}>
