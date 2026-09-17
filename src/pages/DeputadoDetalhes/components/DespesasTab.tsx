@@ -11,6 +11,8 @@ import {
   Paper,
   Select,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import { BarChart, PieChart } from '@mui/x-charts';
@@ -19,7 +21,7 @@ import { DbEmptyState } from '@/components/DbEmptyState';
 import { formatCurrency } from '@/utils';
 import type { ResumoGastos } from '@/types/Deputado';
 
-const meses = [
+const mesesCompletos = [
   'Janeiro',
   'Fevereiro',
   'Março',
@@ -34,17 +36,45 @@ const meses = [
   'Dezembro',
 ];
 
+const mesesAbreviados = [
+  'Jan',
+  'Fev',
+  'Mar',
+  'Abr',
+  'Mai',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Set',
+  'Out',
+  'Nov',
+  'Dez',
+];
+
+const PIE_COLORS = [
+  '#2E96FF',
+  '#02B2AF',
+  '#FF9800',
+  '#F44336',
+  '#9C27B0',
+  '#4CAF50',
+  '#FF5722',
+  '#607D8B',
+];
+
 const formatDataset = (
   resumoGastos: ResumoGastos[] | undefined,
-  ano: number
+  ano: number,
+  abreviado: boolean = false
 ): { gastos: number; mes: string }[] => {
   if (!resumoGastos) return [];
+  const listaMeses = abreviado ? mesesAbreviados : mesesCompletos;
   return (
     resumoGastos
       .find((resumo) => resumo.ano === ano)
       ?.meses.map(({ mes, totalGasto }) => ({
         gastos: totalGasto,
-        mes: meses[mes - 1],
+        mes: listaMeses[mes - 1],
       })) || []
   );
 };
@@ -89,14 +119,18 @@ export const DespesasTab = ({
   resumoGastos,
   handleChangeYear,
 }: DespesasTabProps) => {
-  const dataset = formatDataset(resumoGastos, ano);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const dataset = formatDataset(resumoGastos, ano, isMobile);
   const datasetCategorias = formatDatasetCategorias(resumoGastos, ano);
+  const totalGastosAno = datasetCategorias.reduce((acc, curr) => acc + curr.value, 0);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <Paper
         sx={{
-          p: 3,
+          p: { xs: 2, sm: 3 },
           borderRadius: 2,
           display: 'flex',
           flexWrap: 'wrap',
@@ -109,24 +143,25 @@ export const DespesasTab = ({
           <Typography
             variant="subtitle2"
             color="text.secondary"
-            sx={{ textTransform: 'uppercase' }}
+            sx={{ textTransform: 'uppercase', fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
           >
             Gastos Totais no Ano
           </Typography>
           <Typography
             variant="h4"
             color="error.main"
-            sx={{ fontWeight: 'bold' }}
+            sx={{ fontWeight: 'bold', fontSize: { xs: '1.5rem', sm: '2.125rem' } }}
           >
             {getGastosTotaisAno(ano, resumoGastos)}
           </Typography>
         </Box>
-        <FormControl sx={{ minWidth: 150 }}>
+        <FormControl sx={{ minWidth: { xs: '100%', sm: 150 } }}>
           <InputLabel id="select-ano-despesas-label">Ano de Referência</InputLabel>
           <Select
             labelId="select-ano-despesas-label"
             value={ano}
             label="Ano de Referência"
+            size="small"
             onChange={handleChangeYear}
           >
             <MenuItem value={2026}>2026</MenuItem>
@@ -143,13 +178,13 @@ export const DespesasTab = ({
             <CardHeader title="Histórico de Gastos por Mês" />
             <Divider />
             <CardContent
-              sx={{ display: 'flex', justifyContent: 'center', pt: 4 }}
+              sx={{ display: 'flex', justifyContent: 'center', pt: 2, px: { xs: 1, sm: 2 } }}
             >
               {dataset.length > 0 ? (
                 <Box
                   sx={{
                     width: '100%',
-                    overflowX: 'auto',
+                    height: 320,
                     display: 'flex',
                     justifyContent: 'center',
                   }}
@@ -160,9 +195,13 @@ export const DespesasTab = ({
                     series={[
                       { dataKey: 'gastos', label: 'Gastos', color: '#f44336' },
                     ]}
-                    height={350}
-                    width={600}
-                    margin={{ left: 80, right: 20, top: 20, bottom: 30 }}
+                    height={320}
+                    margin={{
+                      left: isMobile ? 65 : 80,
+                      right: 15,
+                      top: 20,
+                      bottom: 25,
+                    }}
                   />
                 </Box>
               ) : (
@@ -181,34 +220,100 @@ export const DespesasTab = ({
             <CardContent
               sx={{
                 display: 'flex',
-                justifyContent: 'center',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
                 alignItems: 'center',
-                height: 'calc(100% - 65px)',
+                pt: 2,
+                px: { xs: 1.5, sm: 2 },
               }}
             >
               {datasetCategorias.length > 0 ? (
                 <Box
-                  sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+                  sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                 >
-                  <PieChart
-                    series={[
-                      {
-                        data: datasetCategorias,
-                        innerRadius: 40,
-                        outerRadius: 120,
-                        paddingAngle: 2,
-                        cornerRadius: 4,
-                      },
-                    ]}
-                    height={350}
-                    width={400}
-                    slotProps={{
-                      legend: {
-                        direction: 'horizontal',
-                        position: { vertical: 'bottom', horizontal: 'center' },
-                      },
-                    }}
-                  />
+                  <Box sx={{ width: '100%', height: 260, display: 'flex', justifyContent: 'center' }}>
+                    <PieChart
+                      colors={PIE_COLORS}
+                      series={[
+                        {
+                          data: datasetCategorias,
+                          innerRadius: 45,
+                          outerRadius: 100,
+                          paddingAngle: 2,
+                          cornerRadius: 4,
+                        },
+                      ]}
+                      height={260}
+                      hideLegend={true}
+                    />
+                  </Box>
+
+                  <Box sx={{ width: '100%', mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {datasetCategorias.map((item, index) => {
+                      const cor = PIE_COLORS[index % PIE_COLORS.length];
+                      const porcentagem =
+                        totalGastosAno > 0
+                          ? ((item.value / totalGastosAno) * 100).toFixed(1)
+                          : '0';
+
+                      return (
+                        <Box
+                          key={item.id}
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: 1.5,
+                            py: 0.75,
+                            px: 1.5,
+                            borderRadius: 1.5,
+                            bgcolor: 'action.hover',
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0, flex: 1 }}>
+                            <Box
+                              sx={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: '50%',
+                                bgcolor: cor,
+                                flexShrink: 0,
+                              }}
+                            />
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                fontWeight: 500,
+                                fontSize: { xs: '0.75rem', sm: '0.825rem' },
+                                lineHeight: 1.25,
+                                wordBreak: 'break-word',
+                              }}
+                            >
+                              {item.label}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ textAlign: 'right', flexShrink: 0, ml: 1 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                fontWeight: 700,
+                                fontSize: { xs: '0.75rem', sm: '0.825rem' },
+                              }}
+                            >
+                              {formatCurrency(item.value)}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              sx={{ fontSize: '0.7rem' }}
+                            >
+                              {porcentagem}%
+                            </Typography>
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
                 </Box>
               ) : (
                 <DbEmptyState

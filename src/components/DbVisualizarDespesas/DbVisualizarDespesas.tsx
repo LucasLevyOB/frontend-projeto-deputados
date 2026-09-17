@@ -9,10 +9,13 @@ import {
     CircularProgress,
     Chip,
     Link,
+    useTheme,
+    useMediaQuery,
 } from '@mui/material';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { formatCurrency } from '@/utils';
 import { DbEmptyState } from '@/components/DbEmptyState';
+import { DbSelectFilter } from '@/components/DbSelectFilter';
 import { OpenInNew } from '@mui/icons-material';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
@@ -26,6 +29,9 @@ interface Props {
 }
 
 const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
     const [despesas, setDespesas] = useState<Despesa[]>([]);
     const [pageDespesas, setPageDespesas] = useState<number>(1);
     const [hasMoreDespesas, setHasMoreDespesas] = useState<boolean>(true);
@@ -58,14 +64,15 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
             ano,
             descricao
         );
-        setDespesas((prev) => [...prev, ...response.data]);
+        setDespesas((prevDespesas) => [...prevDespesas, ...response.data]);
         setHasMoreDespesas(pageDespesas < response.totalPages);
         setLoadingDespesas(false);
-    }
+    };
 
-    const handleDescricao = (newDescricao: string | undefined) => {
-        setDescricao(newDescricao);
-    }
+    const handleDescricao = (selectedDescricao: string | undefined) => {
+        setDescricao(selectedDescricao);
+        setPageDespesas(1);
+    };
 
     useEffect(() => {
         if (id) {
@@ -79,10 +86,12 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
         }
     }, [pageDespesas]);
 
+    const categoriasAno = resumoGastos?.find((r) => r.ano === ano)?.categorias || [];
+
     if (despesas.length === 0) {
         return (
             <Box sx={{ width: '100%', mt: 4 }}>
-                <Typography variant="h5" sx={{ mb: 2 }}>
+                <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
                     Despesas
                 </Typography>
                 <DbEmptyState
@@ -95,15 +104,25 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
 
     return (
         <Box sx={{ width: '100%', mt: 4 }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
+            <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
                 Despesas
             </Typography>
 
-            {resumoGastos && !!ano && (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                    {resumoGastos
-                        .find((r) => r.ano === ano)
-                        ?.categorias.map((cat, idx) => (
+            {categoriasAno.length > 0 && (
+                isMobile ? (
+                    <DbSelectFilter
+                        label="Filtrar por Categoria"
+                        value={descricao}
+                        allLabel="Todas as Categorias"
+                        options={categoriasAno.map((cat) => ({
+                            value: cat.descricao,
+                            label: `${cat.descricao} (${formatCurrency(cat.totalGasto)})`,
+                        }))}
+                        onChange={handleDescricao}
+                    />
+                ) : (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                        {categoriasAno.map((cat, idx) => (
                             <Chip
                                 key={idx}
                                 label={`${cat.descricao}: ${formatCurrency(cat.totalGasto)}`}
@@ -114,62 +133,100 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
                                 onDelete={descricao === cat.descricao ? () => handleDescricao(undefined) : undefined}
                             />
                         ))}
-                </Box>
+                    </Box>
+                )
             )}
 
             <Box
                 sx={{
-                    maxHeight: 400,
+                    maxHeight: { xs: 480, sm: 420 },
                     overflowY: 'auto',
                     border: '1px solid',
                     borderColor: 'divider',
-                    borderRadius: 1,
+                    borderRadius: 2,
                 }}
             >
-                <List>
+                <List disablePadding>
                     {despesas.map((despesa, index) => {
                         const isLast = despesas.length === index + 1;
                         return (
                             <Box key={index} ref={isLast ? lastDespesaElementRef : null}>
-                                <ListItem>
+                                <ListItem sx={{ py: 1.5, px: { xs: 1.5, sm: 2 } }}>
                                     <ListItemText
                                         primary={
-                                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Typography variant="body1">
+                                            <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1 }}>
+                                                <Typography
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        fontWeight: 'bold',
+                                                        lineHeight: 1.25,
+                                                        fontSize: { xs: '0.85rem', sm: '0.95rem' },
+                                                    }}
+                                                >
                                                     {despesa.descricao}
                                                 </Typography>
-                                                <Link href={despesa.urlDocumento} target="_blank" sx={{ display: 'flex', alignItems: 'center' }}>
-                                                    <OpenInNew />
-                                                </Link>
+                                                {despesa.urlDocumento && (
+                                                    <Link
+                                                        href={despesa.urlDocumento}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        sx={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            color: 'primary.main',
+                                                            flexShrink: 0,
+                                                            p: 0.5,
+                                                        }}
+                                                    >
+                                                        <OpenInNew fontSize="small" />
+                                                    </Link>
+                                                )}
                                             </Box>
                                         }
                                         secondary={
-                                            <>
+                                            <Box sx={{ mt: 0.5 }}>
+                                                {despesa.descricaoEspecificacao && (
+                                                    <Typography
+                                                        component="span"
+                                                        variant="caption"
+                                                        color="text.secondary"
+                                                        sx={{ display: 'block', mb: 0.5, lineHeight: 1.25 }}
+                                                    >
+                                                        {despesa.descricaoEspecificacao}
+                                                    </Typography>
+                                                )}
+                                                <Typography
+                                                    component="span"
+                                                    variant="body2"
+                                                    sx={{ display: 'block', fontWeight: 600, color: 'text.primary', mb: 0.25 }}
+                                                >
+                                                    Valor: {formatCurrency(Number(despesa.valorLiquido))}
+                                                </Typography>
                                                 <Typography
                                                     component="span"
                                                     variant="caption"
-                                                    sx={{ display: 'block', mb: 0.5 }}
+                                                    color="text.secondary"
+                                                    sx={{ display: 'block', mb: 0.25 }}
                                                 >
-                                                    {despesa.descricaoEspecificacao}
-                                                </Typography>
-                                                <Typography component="span" variant="body2" sx={{ display: 'block', mb: 0.5 }}>
-                                                    Valor: {formatCurrency(Number(despesa.valorLiquido))}
-                                                </Typography>
-                                                <Typography component="span" variant="body2" sx={{ display: 'block', mb: 0.5 }}>
                                                     Fornecedor: {despesa.fornecedor}
                                                 </Typography>
-                                                <Typography component="span" variant="body2">
+                                                <Typography
+                                                    component="span"
+                                                    variant="caption"
+                                                    color="text.secondary"
+                                                    sx={{ display: 'block' }}
+                                                >
                                                     Data:{' '}
                                                     {new Date(despesa.dataEmissao).toLocaleDateString(
                                                         'pt-BR',
                                                         { timeZone: 'UTC' }
                                                     )}
                                                 </Typography>
-                                            </>
+                                            </Box>
                                         }
                                     />
                                 </ListItem>
-                                {!isLast && <Divider />}
+                                {index < despesas.length - 1 && <Divider />}
                             </Box>
                         );
                     })}

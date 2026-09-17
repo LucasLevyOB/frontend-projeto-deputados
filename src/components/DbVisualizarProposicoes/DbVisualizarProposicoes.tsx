@@ -12,9 +12,12 @@ import {
     TextField,
     InputAdornment,
     Tooltip,
+    useTheme,
+    useMediaQuery,
 } from '@mui/material';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { DbEmptyState } from '@/components/DbEmptyState';
+import { DbSelectFilter } from '@/components/DbSelectFilter';
 import { OpenInNew, Search } from '@mui/icons-material';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -29,6 +32,9 @@ interface Props {
 }
 
 const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
     const [proposicoes, setProposicoes] = useState<Proposicao[]>([]);
     const [page, setPage] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
@@ -73,6 +79,7 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
 
     const handleSiglaTipo = (newSiglaTipo: string | undefined) => {
         setSiglaTipo(newSiglaTipo);
+        setPage(1);
     };
 
     useEffect(() => {
@@ -87,13 +94,15 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
         }
     }, [page]);
 
+    const tiposAno = resumoProposicoes?.find((r) => r.ano === ano)?.tipos || [];
+
     return (
         <Box sx={{ width: '100%', mt: 4 }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
+            <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
                 Proposições
             </Typography>
 
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{ mb: 2.5 }}>
                 <TextField
                     fullWidth
                     variant="outlined"
@@ -113,14 +122,23 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                 />
             </Box>
 
-            {resumoProposicoes && !!ano && (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-                    {resumoProposicoes
-                        .find((r) => r.ano === ano)
-                        ?.tipos.map((tipo, idx) => (
-                            <Tooltip title={tipo.descricaoTipo}>
+            {tiposAno.length > 0 && (
+                isMobile ? (
+                    <DbSelectFilter
+                        label="Filtrar por Tipo"
+                        value={siglaTipo}
+                        allLabel="Todos os Tipos"
+                        options={tiposAno.map((tipo) => ({
+                            value: tipo.siglaTipo,
+                            label: `${tipo.siglaTipo} - ${tipo.descricaoTipo} (${tipo.quantidade})`,
+                        }))}
+                        onChange={handleSiglaTipo}
+                    />
+                ) : (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                        {tiposAno.map((tipo, idx) => (
+                            <Tooltip key={idx} title={tipo.descricaoTipo}>
                                 <Chip
-                                    key={idx}
                                     label={`${tipo.siglaTipo} (${tipo.quantidade})`}
                                     variant={siglaTipo === tipo.siglaTipo ? "filled" : "outlined"}
                                     color={siglaTipo === tipo.siglaTipo ? "primary" : "default"}
@@ -131,7 +149,8 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
                                 />
                             </Tooltip>
                         ))}
-                </Box>
+                    </Box>
+                )
             )}
 
             {proposicoes.length === 0 && !loading ? (
@@ -142,61 +161,85 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
             ) : (
                 <Box
                     sx={{
-                        maxHeight: 400,
+                        maxHeight: { xs: 480, sm: 420 },
                         overflowY: 'auto',
                         border: '1px solid',
                         borderColor: 'divider',
-                        borderRadius: 1,
+                        borderRadius: 2,
                     }}
                 >
-                    <List>
+                    <List disablePadding>
                         {proposicoes.map((proposicao, index) => {
                             const isLast = proposicoes.length === index + 1;
                             return (
                                 <Box key={`${proposicao.id}-${index}`} ref={isLast ? lastElementRef : null}>
-                                    <ListItem>
+                                    <ListItem sx={{ py: 1.5, px: { xs: 1.5, sm: 2 } }}>
                                         <ListItemText
                                             disableTypography
                                             primary={
-                                                <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
-                                                    <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1.5 }}>
+                                                    <Typography
+                                                        variant="subtitle2"
+                                                        sx={{
+                                                            fontWeight: 'bold',
+                                                            lineHeight: 1.25,
+                                                            fontSize: { xs: '0.85rem', sm: '0.95rem' },
+                                                        }}
+                                                    >
                                                         {proposicao.titulo}
                                                     </Typography>
                                                     {proposicao.urlInteiroTeor && (
-                                                        <Link href={proposicao.urlInteiroTeor} target="_blank" sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                                                        <Link
+                                                            href={proposicao.urlInteiroTeor}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            sx={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                color: 'primary.main',
+                                                                flexShrink: 0,
+                                                                p: 0.5,
+                                                            }}
+                                                        >
                                                             <OpenInNew fontSize="small" />
                                                         </Link>
                                                     )}
                                                 </Box>
                                             }
                                             secondary={
-                                                <>
-                                                    <Typography component="span" variant="body2" color="text.secondary" sx={{ display: 'block', mb: 0.5, mt: 0.5 }}>
+                                                <Box sx={{ mt: 0.5 }}>
+                                                    <Typography
+                                                        component="span"
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                        sx={{ display: 'block', mb: 0.5, lineHeight: 1.3 }}
+                                                    >
                                                         {proposicao.ementa}
                                                     </Typography>
                                                     {proposicao.temas && proposicao.temas.length > 0 && (
-                                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5 }}>
+                                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 0.5, mb: 0.5 }}>
                                                             {proposicao.temas.map((tema, idx) => (
                                                                 <Chip
                                                                     key={idx}
                                                                     label={tema}
                                                                     size="small"
                                                                     variant="outlined"
+                                                                    sx={{ fontSize: '0.7rem' }}
                                                                 />
                                                             ))}
                                                         </Box>
                                                     )}
-                                                    <Typography component="span" variant="caption" color="text.disabled" sx={{ mt: 1, display: 'block' }}>
+                                                    <Typography component="span" variant="caption" color="text.disabled" sx={{ mt: 0.75, display: 'block' }}>
                                                         <strong>Status Atual:</strong> {proposicao.tipoSituacaoProposicao ?? "Sem Status"}
                                                     </Typography>
-                                                    <Typography component="span" variant="caption" color="text.disabled" sx={{ mt: 0.5, display: 'block' }}>
+                                                    <Typography component="span" variant="caption" color="text.disabled" sx={{ mt: 0.25, display: 'block' }}>
                                                         <strong>Apresentação:</strong>{' '}
                                                         {new Date(proposicao.dataApresentacao).toLocaleDateString(
                                                             'pt-BR',
                                                             { timeZone: 'UTC' }
                                                         )}
                                                     </Typography>
-                                                </>
+                                                </Box>
                                             }
                                         />
                                     </ListItem>

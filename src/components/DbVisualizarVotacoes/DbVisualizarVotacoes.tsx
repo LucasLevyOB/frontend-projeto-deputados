@@ -134,12 +134,6 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
                                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
                                                     <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, flexDirection: 'column' }}>
                                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                            <Chip
-                                                                label={`Voto: ${votacao.voto}`}
-                                                                color={getVotoColor(votacao.voto) as any}
-                                                                size="small"
-                                                                sx={{ fontWeight: 'bold' }}
-                                                            />
                                                             <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
                                                                 {votacao.votacao_.descricao}
                                                             </Typography>
@@ -160,6 +154,12 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
                                                         </Typography>
                                                     )}
                                                     <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 1 }}>
+                                                        <Chip
+                                                            label={`Voto: ${votacao.voto}`}
+                                                            color={getVotoColor(votacao.voto) as any}
+                                                            size="small"
+                                                            sx={{ fontWeight: 'bold' }}
+                                                        />
                                                         <Typography component="span" variant="caption" color="text.disabled">
                                                             <strong>Data do Voto:</strong>{' '}
                                                             {new Date(votacao.dataHoraVoto).toLocaleDateString(

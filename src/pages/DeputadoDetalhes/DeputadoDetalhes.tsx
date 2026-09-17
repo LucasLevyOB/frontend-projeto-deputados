@@ -110,7 +110,7 @@ const DeputadoDetalhes = () => {
         variant='outlined'
         sx={{
           width: '100%',
-          p: 4,
+          p: { xs: 2.5, sm: 4 },
           borderRadius: 3,
           border: '1px solid',
           borderColor: 'divider',
@@ -121,17 +121,17 @@ const DeputadoDetalhes = () => {
             display: 'flex',
             flexDirection: { xs: 'column', sm: 'row' },
             alignItems: { xs: 'center', sm: 'flex-start' },
-            gap: 4,
+            gap: { xs: 2.5, sm: 4 },
           }}
         >
           <Avatar
             src={deputado.urlFoto}
             alt={'Foto de ' + deputado.nome}
             sx={{
-              width: 160,
-              height: 160,
+              width: { xs: 110, sm: 160 },
+              height: { xs: 110, sm: 160 },
               boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
-              border: '4px solid white',
+              border: { xs: '3px solid white', sm: '4px solid white' },
             }}
           />
           <Box
@@ -144,7 +144,15 @@ const DeputadoDetalhes = () => {
               flex: 1,
             }}
           >
-            <Typography variant="h3" sx={{ fontWeight: '800', letterSpacing: '-0.5px' }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontSize: { xs: '1.6rem', sm: '2.4rem' },
+                fontWeight: '800',
+                letterSpacing: '-0.5px',
+                lineHeight: 1.2,
+              }}
+            >
               {deputado.nome}
             </Typography>
 
@@ -164,22 +172,22 @@ const DeputadoDetalhes = () => {
             </Box>
 
             {deputado.nomeEleitoral && deputado.nomeEleitoral !== deputado.nome && (
-              <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+              <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
                 <strong>Nome Eleitoral:</strong> {deputado.nomeEleitoral}
               </Typography>
             )}
 
             {deputado.estatisticas?.temasProposicoes && deputado.estatisticas.temasProposicoes.length > 0 && (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: { xs: 'center', sm: 'flex-start' }, mt: 1 }}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: { xs: 'center', sm: 'flex-start' }, mt: 0.5 }}>
                 {deputado.estatisticas.temasProposicoes
                   .slice(0, 3)
                   .map((temaObj, index) => (
                     <Chip
                       key={index}
                       label={temaObj.tema}
-                      color="primary"
                       size="small"
-                      variant="filled"
+                      variant="outlined"
+                      sx={{ borderColor: 'divider', bgcolor: 'background.paper', fontWeight: 500 }}
                     />
                   ))}
               </Box>
@@ -196,6 +204,7 @@ const DeputadoDetalhes = () => {
             aria-label="abas do deputado"
             variant="scrollable"
             scrollButtons="auto"
+            allowScrollButtonsMobile
           >
             <Tab label="Visão Geral" {...a11yProps(0)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
             <Tab label="Cota Parlamentar" {...a11yProps(1)} sx={{ fontWeight: 'bold', fontSize: '1rem' }} />
