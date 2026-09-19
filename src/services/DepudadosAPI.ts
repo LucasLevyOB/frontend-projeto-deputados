@@ -1,7 +1,7 @@
 import type { Deputado, DeputadoResumo, PagedResponse, Despesa, Proposicao, Votacao, VotacaoComparadaItem } from '@/types';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_ENV === 'development' ? 'http://localhost:3001' : 'https://backend-projeto-depudados.onrender.com';
 
 export default class DepudadosAPI {
   private request;
