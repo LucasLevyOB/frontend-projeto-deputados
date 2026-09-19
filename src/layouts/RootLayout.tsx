@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import DbAppBar from '@/components/DbAppBar/DbAppBar';
 import { DbFooter } from '@/components/DbFooter';
+import { DbCookieBanner } from '@/components/DbCookieBanner';
 
 export const RootLayout = () => {
   return (
@@ -11,6 +12,7 @@ export const RootLayout = () => {
         <Outlet />
       </Box>
       <DbFooter />
+      <DbCookieBanner />
     </Box>
   );
 };

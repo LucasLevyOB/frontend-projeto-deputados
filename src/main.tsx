@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './config/firebase';
+import { initCookieConsent } from './services/cookieConsent';
 
+initCookieConsent();
 import App from './App.tsx';
 import { AppThemeProvider } from './theme';
 
