@@ -13,6 +13,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Alert,
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material';
 import { BarChart, PieChart } from '@mui/x-charts';
@@ -158,6 +159,12 @@ export const ProposicoesTab = ({
           </Select>
         </FormControl>
       </Paper>
+
+      {ano === 2026 && (
+        <Alert severity="info" variant="outlined" sx={{ mb: 3, borderRadius: 2 }}>
+          Os dados referentes ao ano de <strong>2026</strong> contemplam proposições registradas até <strong>Maio de 2026</strong>.
+        </Alert>
+      )}
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 7 }}>

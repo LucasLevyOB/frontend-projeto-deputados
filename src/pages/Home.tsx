@@ -6,6 +6,7 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ShieldIcon from '@mui/icons-material/Shield';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -88,6 +89,12 @@ export const Home = () => {
           >
             Explorar Deputados
           </Button>
+          <Box sx={{ mt: 2.5, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.75, opacity: 0.85 }}>
+            <CalendarMonthIcon sx={{ fontSize: '1rem', color: 'inherit' }} />
+            <Typography variant="caption" sx={{ fontSize: '0.85rem', fontWeight: 400 }}>
+              Base de dados consolidada de 2023 até <strong>Maio de 2026</strong>
+            </Typography>
+          </Box>
         </Container>
       </Box>
 
