@@ -16,7 +16,7 @@ A aplicação está implantada e disponível publicamente no Firebase Hosting:
 
 🔗 **[https://depudados.web.app/](https://depudados.web.app/)**
 
-> **Contexto Acadêmico:** Projeto desenvolvido no âmbito da disciplina de **Programação para Internet e Web (PIW)** do curso de Ciência da Computação / Engenharia de Software da **Universidade Federal do Ceará (UFC)**.
+> **Contexto Acadêmico:** Projeto desenvolvido no âmbito da disciplina de **Programação para Internet e Web (PIW)** do curso de Engenharia de Software da **Universidade Federal do Ceará (UFC)**.
 
 ---
 
