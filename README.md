@@ -22,23 +22,42 @@ A aplicação está implantada e disponível publicamente no Firebase Hosting:
 
 ## 📑 Funcionalidades Principais
 
-- **📊 Dashboard Interativo (Home):**
-  - Indicadores e estatísticas consolidadas da atividade legislativa.
-  - Métricas de despesas, distribuição temática e deputados em destaque.
+- **📊 Página Inicial (`/`):**
+  - Apresentação do intuito do projeto e dos dados que serão disponibilizados.
+
+  ![Página inicial do site](readme-images/pagina-inicial.png)
 
 - **🔍 Consulta e Filtragem de Deputados (`/deputados`):**
   - Busca textual por nome do parlamentar.
   - Filtros combinados por Unidade Federativa (UF) e sigla partidária.
-  - **Scroll virtualizado** para renderização fluida e performática de centenas de registros.
+  - **Paginação** para renderização fluida e performática de centenas de registros.
+
+  ![Página de consulta e filtragem de deputados](readme-images/consulta-filtragem.png)
+  
 
 - **👤 Perfil Detalhado do Deputado (`/deputado/:id`):**
   - Dados biográficos, gabinete, partido e estado de representação.
+  - Estátisticas gerais de proposições, gastos, presenças e temas de atuação.
+  
+  ![Página de perfil do deputado](readme-images/pagina-perfil.png)
+  
   - **Aba de Despesas:** gráficos interativos de gastos mensais e detalhamento por tipo de despesa via `@mui/x-charts`.
+
+  ![Aba de despesas do deputado](readme-images/aba-despesas.png)
+
   - **Aba de Proposições:** tramitações, ementas e projetos de lei apresentados pelo parlamentar.
-  - **Aba de Votações e Presenças:** registro histórico de participação e posicionamentos em plenário.
+
+  ![Aba de proposições do deputado](readme-images/aba-proposicoes.png)
+
+  - **Aba de Votações:** registro histórico de participação e posicionamentos em plenário.
+
+  ![Aba de votações e presenças do deputado](readme-images/aba-votacoes.png)
+
 
 - **⚖️ Comparador Parlamentar (`/comparar`):**
   - Comparação lado a lado de gastos, presenças e votações entre diferentes parlamentares.
+  
+  ![Página de comparação entre deputados](readme-images/pagina-comparar.png)
 
 ---
 
@@ -181,4 +200,5 @@ frontend-projeto-depudados/
   ```
 - **Backend Conectado:**
   - Em desenvolvimento: aponta para `http://localhost:3001` (quando `VITE_ENV=development`).
+  - Backend para desenvolvimento encontra-se no repositório [backend-projeto-depudados](https://github.com/LucasLevyOB/backend-projeto-depudados).
   - Em produção: consome a API do backend hospedada em [https://backend-projeto-depudados.onrender.com](https://backend-projeto-depudados.onrender.com).
