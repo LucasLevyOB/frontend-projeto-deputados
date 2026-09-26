@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, Divider, Grid, Typography, Box, IconButton, Tooltip, Chip } from '@mui/material';
 import { StatCard } from './StatCard';
 import { formatCurrency, getRedeSocialIcon, getRedeSocialName } from '@/utils';
+import { METRICAS_INFO } from '@/constants/metricas';
 
 import type { Deputado } from '@/types';
 
@@ -103,6 +104,8 @@ export const VisaoGeralTab = ({ deputado }: VisaoGeralTabProps) => {
                 title="Score Eficiência"
                 value={deputado.estatisticas.scoreEficiencia}
                 color="secondary.main"
+                tooltip={METRICAS_INFO.scoreEficiencia.descricaoCurta}
+                description={METRICAS_INFO.scoreEficiencia.resumo}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>

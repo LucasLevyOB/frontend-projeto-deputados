@@ -1,7 +1,10 @@
-import { Box, Typography, Skeleton, Card, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Typography, Skeleton, Card, useTheme, useMediaQuery, Tooltip } from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { StatCard } from '@/pages/DeputadoDetalhes/components/StatCard';
 import { formatCurrency, formatCompactCurrency } from '@/utils';
 import { determinarVencedor } from '../utils/comparacaoUtils';
+import { METRICAS_INFO } from '@/constants/metricas';
+
 import type { Deputado } from '@/types';
 
 interface ComparacaoGeralProps {
@@ -56,7 +59,8 @@ export const ComparacaoGeral = ({
     cor1: string,
     cor2: string,
     carregando1: boolean,
-    carregando2: boolean
+    carregando2: boolean,
+    tooltip?: string
   ) => {
     return (
       <Card
@@ -72,19 +76,40 @@ export const ComparacaoGeral = ({
           textAlign: 'center',
         }}
       >
-        <Typography
-          variant="caption"
+        <Box
           sx={{
-            display: 'block',
-            fontWeight: 700,
-            color: 'text.secondary',
-            letterSpacing: '0.5px',
-            textTransform: 'uppercase',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 0.5,
             mb: 1,
           }}
         >
-          {titulo}
-        </Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              fontWeight: 700,
+              color: 'text.secondary',
+              letterSpacing: '0.5px',
+              textTransform: 'uppercase',
+            }}
+          >
+            {titulo}
+          </Typography>
+          {tooltip && (
+            <Tooltip title={tooltip} arrow enterTouchDelay={0}>
+              <InfoOutlinedIcon
+                sx={{
+                  fontSize: 15,
+                  color: 'text.secondary',
+                  cursor: 'help',
+                  opacity: 0.8,
+                  '&:hover': { opacity: 1 },
+                }}
+              />
+            </Tooltip>
+          )}
+        </Box>
 
         <Box
           sx={{
@@ -143,7 +168,7 @@ export const ComparacaoGeral = ({
             <Skeleton
               key={item}
               variant="rounded"
-              height={84}
+              height={92}
               sx={{ borderRadius: 2 }}
             />
           ))}
@@ -153,28 +178,30 @@ export const ComparacaoGeral = ({
 
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%', maxWidth: 280 }}>
-        <Box sx={{ height: 84 }}>
+        <Box sx={{ minHeight: 92 }}>
           <StatCard
             title="Score Eficiência"
             value={valores.score}
             color={cores.score}
+            tooltip={METRICAS_INFO.scoreEficiencia.descricaoCurta}
+            description={METRICAS_INFO.scoreEficiencia.resumo}
           />
         </Box>
-        <Box sx={{ height: 84 }}>
+        <Box sx={{ minHeight: 92 }}>
           <StatCard
             title="Projetos de Lei"
             value={valores.pls}
             color={cores.pls}
           />
         </Box>
-        <Box sx={{ height: 84 }}>
+        <Box sx={{ minHeight: 92 }}>
           <StatCard
             title="Outras Proposições"
             value={valores.outras}
             color={cores.outras}
           />
         </Box>
-        <Box sx={{ height: 84 }}>
+        <Box sx={{ minHeight: 92 }}>
           <StatCard
             title="Gastos"
             value={formatCurrency(valores.gastos)}
@@ -211,7 +238,8 @@ export const ComparacaoGeral = ({
             corScore1,
             corScore2,
             !deputado1,
-            !deputado2
+            !deputado2,
+            METRICAS_INFO.scoreEficiencia.descricaoCurta
           )}
           {renderMobileVsCard(
             'Projetos de Lei',

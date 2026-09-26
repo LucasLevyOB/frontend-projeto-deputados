@@ -4,6 +4,7 @@ import { Box, CardActionArea, Chip, Divider } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import StatItem from './StatItem';
 import { Link } from 'react-router-dom';
+import { METRICAS_INFO } from '@/constants/metricas';
 
 import type { Deputado } from '@/types';
 
@@ -61,7 +62,12 @@ const DbCard = ({ deputado }: Props) => {
                         />
                     </Box>
 
-                    <StatItem label="Eficiência" value={deputado.estatisticas.scoreEficiencia} highlight />
+                    <StatItem
+                        label="Eficiência"
+                        value={deputado.estatisticas.scoreEficiencia}
+                        highlight
+                        tooltip={METRICAS_INFO.scoreEficiencia.descricaoCurta}
+                    />
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', mt: 3, mb: 2, px: 1 }}>
                         <StatItem label="Projetos" value={deputado.estatisticas.projetosDeLei} />
