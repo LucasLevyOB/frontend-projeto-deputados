@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const SITE_URL = process.env.SITE_URL || 'https://depudados.com.br';
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.API_BASE_URL || 'https://backend-projeto-depudados.onrender.com';
 
 /**
  * Cria a tag <url> individual do XML para uma rota.
