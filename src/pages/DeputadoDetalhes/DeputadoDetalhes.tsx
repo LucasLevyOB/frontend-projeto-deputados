@@ -9,13 +9,14 @@ import {
   Chip,
   Button,
 } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { VisaoGeralTab } from './components/VisaoGeralTab';
 import { DespesasTab } from './components/DespesasTab';
 import { ProposicoesTab } from './components/ProposicoesTab';
 import { VotacoesTab } from './components/VotacoesTab';
+import { DeputadoDetalhesSkeleton } from './components/DeputadoDetalhesSkeleton';
 
 import type { SelectChangeEvent } from '@mui/material';
 import type { Deputado } from '@/types';
@@ -53,7 +54,6 @@ function a11yProps(index: number) {
 
 const DeputadoDetalhes = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [deputado, setDeputado] = useState<Deputado | null>(null);
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [tabValue, setTabValue] = useState(0);
@@ -109,7 +109,7 @@ const DeputadoDetalhes = () => {
   }, [deputado]);
 
   if (!deputado) {
-    return <Box sx={{ p: 4, textAlign: 'center' }}>Carregando dados do deputado...</Box>;
+    return <DeputadoDetalhesSkeleton />;
   }
 
   return (
@@ -128,7 +128,8 @@ const DeputadoDetalhes = () => {
       <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start', mb: -1 }}>
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          component={Link}
+          to='/deputados'
           color="inherit"
           variant="text"
         >

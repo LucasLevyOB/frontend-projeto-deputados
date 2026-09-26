@@ -3,20 +3,15 @@ import CardContent from '@mui/material/CardContent';
 import { Box, CardActionArea, Chip, Divider } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import StatItem from './StatItem';
+import { Link } from 'react-router-dom';
 
 import type { Deputado } from '@/types';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
     deputado: Deputado;
 }
 
 const DbCard = ({ deputado }: Props) => {
-    const navigate = useNavigate();
-    const handleVerDetalhes = () => {
-        navigate(`/deputado/${deputado._id}`);
-    };
-
     return (
         <Card
             sx={{
@@ -29,7 +24,15 @@ const DbCard = ({ deputado }: Props) => {
                 }
             }}
         >
-            <CardActionArea onClick={handleVerDetalhes} sx={{ height: '100%' }}>
+            <CardActionArea
+                component={Link}
+                to={`/deputado/${deputado._id}`}
+                sx={{
+                    height: '100%',
+                    textDecoration: 'none',
+                    color: 'inherit'
+                }}
+            >
                 <CardContent sx={{ p: 3 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
                         <Box
