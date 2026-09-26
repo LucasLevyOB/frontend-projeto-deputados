@@ -78,6 +78,36 @@ const DeputadoDetalhes = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    const defaultTitle = 'DepuDados | Transparência e Gastos de Deputados Federais';
+    const defaultDescription =
+      'DepuDados - Portal de transparência pública para consulta, análise e acompanhamento dos gastos e atividades de deputados federais.';
+    const metaDescription = document.querySelector('meta[name="description"]');
+
+    if (deputado?.nome) {
+      const partidoUf = deputado.siglaPartido && deputado.siglaUf
+        ? ` (${deputado.siglaPartido}-${deputado.siglaUf})`
+        : '';
+      document.title = `${deputado.nome}${partidoUf} | DepuDados`;
+
+      if (metaDescription) {
+        metaDescription.setAttribute(
+          'content',
+          `Confira gastos, proposições, presença em votações e dados biográficos do deputado federal ${deputado.nome}${partidoUf} na plataforma DepuDados.`
+        );
+      }
+    } else {
+      document.title = 'Carregando deputado... | DepuDados';
+    }
+
+    return () => {
+      document.title = defaultTitle;
+      if (metaDescription) {
+        metaDescription.setAttribute('content', defaultDescription);
+      }
+    };
+  }, [deputado]);
+
   if (!deputado) {
     return <Box sx={{ p: 4, textAlign: 'center' }}>Carregando dados do deputado...</Box>;
   }
@@ -146,6 +176,7 @@ const DeputadoDetalhes = () => {
           >
             <Typography
               variant="h3"
+              component="h1"
               sx={{
                 fontSize: { xs: '1.6rem', sm: '2.4rem' },
                 fontWeight: '800',
