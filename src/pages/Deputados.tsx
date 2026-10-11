@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Grid, Pagination, Container, Typography } from '@mui/material';
+import { Alert, Box, Grid, Pagination, Container, Typography } from '@mui/material';
 import { DbCardDeputado } from '@/components/DbCardDeputado';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { useSearchParams } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { DbFiltragemDeputados } from '@/components/DbFiltragemDeputados';
 import DbEmptyState from '@/components/DbEmptyState/DbEmptyState';
 
 import type { Deputado, PagedResponse } from '@/types';
+
+const SLOW_LOADING_MS = 5000;
 
 export const Deputados = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,9 +20,11 @@ export const Deputados = () => {
 
   const [pagination, setPagination] = useState<PagedResponse<Deputado>>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [slowLoading, setSlowLoading] = useState<boolean>(false);
 
   const fetchDeputados = async (page: number = 1, limit: number = 20, uf?: string, siglaPartido?: string, nome?: string) => {
     setLoading(true);
+    setSlowLoading(false);
     const api = new DepudadosAPI();
     const response = await api.getDeputados(page, limit, uf, siglaPartido, nome);
 
@@ -49,6 +53,12 @@ export const Deputados = () => {
     fetchDeputados(pageParam, 20, ufParam, partidoParam, nomeParam);
   }, [pageParam, ufParam, partidoParam, nomeParam]);
 
+  useEffect(() => {
+    if (!loading) return;
+    const timer = setTimeout(() => setSlowLoading(true), SLOW_LOADING_MS);
+    return () => clearTimeout(timer);
+  }, [loading]);
+
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 4, md: 6 }, display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: { xs: 'flex-start', md: 'center' }, justifyContent: 'space-between', mb: 6, gap: 3 }}>
@@ -74,6 +84,11 @@ export const Deputados = () => {
         </Box>
       ) : (
         <Box sx={{ flexGrow: 1 }}>
+          {loading && slowLoading && (
+            <Alert severity="info" sx={{ mb: 4 }}>
+              O servidor está iniciando, isso pode levar até 1 minuto…
+            </Alert>
+          )}
           <Grid container direction="row" rowSpacing={{ xs: 4, sm: 4, md: 6 }} columnSpacing={{ xs: 1, sm: 3, md: 4, lg: 5, xl: 6 }} sx={{ justifyContent: 'start', alignItems: 'center', pb: 4, width: '100%' }}>
             {loading ? (
               Array.from({ length: 12 }).map((_, index) => (

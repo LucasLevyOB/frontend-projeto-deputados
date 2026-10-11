@@ -1,10 +1,16 @@
+import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import DbAppBar from '@/components/DbAppBar/DbAppBar';
 import { DbFooter } from '@/components/DbFooter';
 import { DbCookieBanner } from '@/components/DbCookieBanner';
+import { pingBackend } from '@/services/PingAPI';
 
 export const RootLayout = () => {
+  useEffect(() => {
+    pingBackend();
+  }, []);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <DbAppBar sx={{ position: 'sticky', top: 0, zIndex: 100 }} />

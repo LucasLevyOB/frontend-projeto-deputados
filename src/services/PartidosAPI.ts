@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_BASE_URL = import.meta.env.VITE_ENV === 'development' ? 'http://localhost:3001' : 'https://backend-projeto-depudados.onrender.com';
+import { API_BASE_URL } from '@/config/api';
 
 export default class PartidosAPI {
     private request;
