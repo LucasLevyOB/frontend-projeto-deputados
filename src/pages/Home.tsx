@@ -1,5 +1,5 @@
 import { Box, Button, Container, Grid, Typography, Paper, useTheme } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import SearchIcon from '@mui/icons-material/Search';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import GavelIcon from '@mui/icons-material/Gavel';
@@ -198,3 +198,5 @@ export const Home = () => {
     </Box>
   );
 };
+
+export default Home;

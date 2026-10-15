@@ -3,7 +3,7 @@ import CardContent from '@mui/material/CardContent';
 import { Box, CardActionArea, Chip, Divider } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import StatItem from './StatItem';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { METRICAS_INFO } from '@/constants/metricas';
 
 import type { Deputado } from '@/types';

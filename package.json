@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "react-router dev",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "prebuild": "npm run sitemap",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "react-router build",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc -b",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -17,19 +18,22 @@
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.1",
     "@mui/x-charts": "^9.4.0",
+    "@react-router/node": "^8.4.0",
+    "@react-router/serve": "^8.4.0",
     "@tanstack/react-virtual": "^3.14.11",
     "axios": "^1.17.0",
     "firebase": "^12.19.0",
+    "isbot": "^5.2.2",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "react-router-dom": "^7.17.0"
+    "react-router": "^8.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@react-router/dev": "^8.4.0",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^10.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
