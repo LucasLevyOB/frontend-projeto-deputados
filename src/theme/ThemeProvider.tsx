@@ -11,16 +11,17 @@ interface AppThemeProviderProps {
 export const AppThemeProvider: React.FC<AppThemeProviderProps> = ({
   children,
 }) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme === 'dark';
-  });
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   useEffect(() => {
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+    setIsDarkMode(localStorage.getItem('theme') === 'dark');
+  }, []);
 
-  const toggleTheme = () => setIsDarkMode((prev) => !prev);
+  const toggleTheme = () => {
+    const next = !isDarkMode;
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+    setIsDarkMode(next);
+  };
 
   const themeContextValue = useMemo(
     () => ({ isDarkMode, toggleTheme }),

@@ -1,16 +1,11 @@
 {
-  "hosting": {
-    "public": "dist",
+  "apphosting": {
+    "backendId": "frontend-projeto-deputados",
+    "rootDir": "/",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
     ]
   }
 }

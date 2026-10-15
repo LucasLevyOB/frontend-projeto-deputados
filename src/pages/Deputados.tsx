@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Box, Grid, Pagination, Container, Typography } from '@mui/material';
 import { DbCardDeputado } from '@/components/DbCardDeputado';
 import DepudadosAPI from '@/services/DepudadosAPI';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import DbSkeletonCard from '@/components/DbSkeletonCard';
 import { DbFiltragemDeputados } from '@/components/DbFiltragemDeputados';
 import DbEmptyState from '@/components/DbEmptyState/DbEmptyState';
@@ -121,3 +121,5 @@ export const Deputados = () => {
     </Container>
   );
 };
+
+export default Deputados;

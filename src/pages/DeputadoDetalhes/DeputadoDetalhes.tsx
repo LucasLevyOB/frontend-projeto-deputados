@@ -9,7 +9,7 @@ import {
   Chip,
   Button,
 } from '@mui/material';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { VisaoGeralTab } from './components/VisaoGeralTab';

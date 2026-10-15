@@ -1,13 +1,31 @@
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from "node:url";
+import { reactRouter } from "@react-router/dev/vite";
+import { defineConfig } from "vite";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [reactRouter()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
-})
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  optimizeDeps: {
+    include: [
+      "@mui/material",
+      "@mui/material/styles",
+      "@mui/x-charts",
+      "@emotion/react",
+      "@emotion/styled",
+      "@tanstack/react-virtual",
+      "axios",
+      "firebase/app",
+      "firebase/analytics",
+    ],
+  },
+  server: {
+    warmup: {
+      clientFiles: ["./src/entry.client.tsx", "./src/root.tsx", "./src/layouts/**/*.tsx", "./src/pages/**/*.tsx"],
+      ssrFiles: ["./src/root.tsx", "./src/layouts/**/*.tsx", "./src/pages/**/*.tsx"],
+    },
+  },
+});

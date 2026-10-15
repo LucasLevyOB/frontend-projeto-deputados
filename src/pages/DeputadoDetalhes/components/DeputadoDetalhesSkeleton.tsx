@@ -7,7 +7,7 @@ import {
   Button,
   Skeleton,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const DeputadoDetalhesSkeleton = () => {
