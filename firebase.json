@@ -1,6 +1,6 @@
 {
   "apphosting": {
-    "backendId": "depudados",
+    "backendId": "frontend-projeto-deputados",
     "rootDir": "/",
     "ignore": [
       "firebase.json",
