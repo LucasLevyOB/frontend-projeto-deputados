@@ -14,7 +14,16 @@ app.use(
 app.use(express.static("build/client", { maxAge: "1h" }));
 app.use(express.static("public", { maxAge: "1h" }));
 
-// 2. React Router SSR handler (sintaxe compatível com Express 5 / path-to-regexp)
+// 2. Cache-Control padrão para respostas SSR na CDN do Firebase App Hosting
+app.use((_req, res, next) => {
+  res.setHeader(
+    "Cache-Control",
+    "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+  );
+  next();
+});
+
+// 3. React Router SSR handler (sintaxe compatível com Express 5 / path-to-regexp)
 app.all(
   "/{*splat}",
   createRequestHandler({
