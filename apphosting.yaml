@@ -6,7 +6,7 @@ runConfig:
 
 scripts:
   buildCommand: npm run build
-  runCommand: npm run start
+  runCommand: node index.js
 
 env:
   - variable: HOST
