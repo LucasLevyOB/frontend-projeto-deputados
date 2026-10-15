@@ -2,7 +2,7 @@ runConfig:
   minInstances: 0
   maxInstances: 2
   cpu: 1
-  memoryMiB: 512
+  memoryMiB: 1024
 
 scripts:
   buildCommand: npm run build
@@ -10,7 +10,7 @@ scripts:
 
 env:
   - variable: HOST
-    secret: 0.0.0.0
+    value: 0.0.0.0
   - variable: VITE_FIREBASE_API_KEY
     secret: VITE_FIREBASE_API_KEY
     availability:
