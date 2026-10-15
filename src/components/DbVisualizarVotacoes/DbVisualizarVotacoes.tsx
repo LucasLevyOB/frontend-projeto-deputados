@@ -14,7 +14,8 @@ import {
 } from '@mui/material';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { DbEmptyState } from '@/components/DbEmptyState';
-import { OpenInNew, Search } from '@mui/icons-material';
+import OpenInNew from '@mui/icons-material/OpenInNew';
+import Search from '@mui/icons-material/Search';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useDebounce } from '@/hooks/useDebounce';
 

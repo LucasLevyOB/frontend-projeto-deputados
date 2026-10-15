@@ -22,10 +22,7 @@ export default defineConfig({
       "firebase/analytics",
     ],
   },
-  server: {
-    warmup: {
-      clientFiles: ["./src/entry.client.tsx", "./src/root.tsx", "./src/layouts/**/*.tsx", "./src/pages/**/*.tsx"],
-      ssrFiles: ["./src/root.tsx", "./src/layouts/**/*.tsx", "./src/pages/**/*.tsx"],
-    },
+  ssr: {
+    noExternal: ['@mui/**', '@emotion/**'],
   },
 });

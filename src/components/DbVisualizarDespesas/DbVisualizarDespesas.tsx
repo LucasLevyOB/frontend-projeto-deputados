@@ -16,7 +16,7 @@ import DepudadosAPI from '@/services/DepudadosAPI';
 import { formatCurrency } from '@/utils';
 import { DbEmptyState } from '@/components/DbEmptyState';
 import { DbSelectFilter } from '@/components/DbSelectFilter';
-import { OpenInNew } from '@mui/icons-material';
+import OpenInNew from '@mui/icons-material/OpenInNew';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 import type { Despesa } from '@/types';

@@ -9,7 +9,7 @@ import {
   type SxProps,
   type Theme,
 } from '@mui/material';
-import { Clear } from '@mui/icons-material';
+import Clear from '@mui/icons-material/Clear';
 
 export interface SelectFilterOption {
   value: string;
