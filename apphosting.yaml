@@ -9,6 +9,8 @@ scripts:
   runCommand: npm run start
 
 env:
+  - variable: HOST
+    secret: 0.0.0.0
   - variable: VITE_FIREBASE_API_KEY
     secret: VITE_FIREBASE_API_KEY
     availability:
