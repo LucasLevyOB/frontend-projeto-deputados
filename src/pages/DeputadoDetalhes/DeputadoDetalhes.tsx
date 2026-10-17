@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Paper,
@@ -9,60 +9,33 @@ import {
   Chip,
   Button,
 } from '@mui/material';
-import { useParams, Link } from 'react-router';
-import DepudadosAPI from '@/services/DepudadosAPI';
+import {
+  Link,
+  useLoaderData,
+} from 'react-router';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { VisaoGeralTab } from './components/VisaoGeralTab';
 import { DespesasTab } from './components/DespesasTab';
 import { ProposicoesTab } from './components/ProposicoesTab';
 import { VotacoesTab } from './components/VotacoesTab';
-import { DeputadoDetalhesSkeleton } from './components/DeputadoDetalhesSkeleton';
+import { CustomTabPanel } from './components/CustomTabPanel';
 
 import type { SelectChangeEvent } from '@mui/material';
-import type { Deputado } from '@/types';
+import type { loader } from './loader';
 
+export { loader } from './loader';
+export { meta } from './meta';
+export { ErrorBoundary } from './ErrorBoundary';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-      style={{ width: '100%' }}
-    >
-      {value === index && <Box sx={{ pt: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+const a11yProps = (index: number) => ({
+  id: `simple-tab-${index}`,
+  'aria-controls': `simple-tabpanel-${index}`,
+});
 
 const DeputadoDetalhes = () => {
-  const { id } = useParams<{ id: string }>();
-  const [deputado, setDeputado] = useState<Deputado | null>(null);
+  const { deputado } = useLoaderData<typeof loader>();
   const [ano, setAno] = useState<number>(new Date().getFullYear());
   const [tabValue, setTabValue] = useState(0);
-
-  const fetchDeputado = async (id: number) => {
-    const api = new DepudadosAPI();
-    const response = await api.getDeputado(id);
-    setDeputado(response[0]);
-  };
 
   const handleChangeYear = (event: SelectChangeEvent<number>) => {
     setAno(Number(event.target.value));
@@ -71,46 +44,6 @@ const DeputadoDetalhes = () => {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
-
-  useEffect(() => {
-    if (id) {
-      fetchDeputado(Number(id));
-    }
-  }, [id]);
-
-  useEffect(() => {
-    const defaultTitle = 'DepuDados | Transparência e Gastos de Deputados Federais';
-    const defaultDescription =
-      'DepuDados - Portal de transparência pública para consulta, análise e acompanhamento dos gastos e atividades de deputados federais.';
-    const metaDescription = document.querySelector('meta[name="description"]');
-
-    if (deputado?.nome) {
-      const partidoUf = deputado.siglaPartido && deputado.siglaUf
-        ? ` (${deputado.siglaPartido}-${deputado.siglaUf})`
-        : '';
-      document.title = `${deputado.nome}${partidoUf} | DepuDados`;
-
-      if (metaDescription) {
-        metaDescription.setAttribute(
-          'content',
-          `Confira gastos, proposições, presença em votações e dados biográficos do deputado federal ${deputado.nome}${partidoUf} na plataforma DepuDados.`
-        );
-      }
-    } else {
-      document.title = 'Carregando deputado... | DepuDados';
-    }
-
-    return () => {
-      document.title = defaultTitle;
-      if (metaDescription) {
-        metaDescription.setAttribute('content', defaultDescription);
-      }
-    };
-  }, [deputado]);
-
-  if (!deputado) {
-    return <DeputadoDetalhesSkeleton />;
-  }
 
   return (
     <Box
@@ -250,7 +183,7 @@ const DeputadoDetalhes = () => {
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={1}>
           <DespesasTab
-            id={Number(id)}
+            id={deputado._id}
             ano={ano}
             resumoGastos={deputado.resumoGastos}
             handleChangeYear={handleChangeYear}
@@ -258,14 +191,14 @@ const DeputadoDetalhes = () => {
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={2}>
           <ProposicoesTab
-            id={Number(id)}
+            id={deputado._id}
             ano={ano}
             resumoProposicoes={deputado.resumoProposicoes}
             handleChangeYear={handleChangeYear}
           />
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={3}>
-          <VotacoesTab id={Number(id)} />
+          <VotacoesTab id={deputado._id} />
         </CustomTabPanel>
       </Box>
     </Box>
