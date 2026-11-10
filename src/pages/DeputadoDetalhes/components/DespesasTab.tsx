@@ -112,6 +112,8 @@ interface DespesasTabProps {
   ano: number;
   resumoGastos: ResumoGastos[] | undefined;
   handleChangeYear: (event: SelectChangeEvent<number>) => void;
+  anosDisponiveis?: number[];
+  legislatura?: number;
 }
 
 export const DespesasTab = ({
@@ -119,6 +121,8 @@ export const DespesasTab = ({
   ano,
   resumoGastos,
   handleChangeYear,
+  anosDisponiveis,
+  legislatura,
 }: DespesasTabProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -126,6 +130,12 @@ export const DespesasTab = ({
   const dataset = formatDataset(resumoGastos, ano, isMobile);
   const datasetCategorias = formatDatasetCategorias(resumoGastos, ano);
   const totalGastosAno = datasetCategorias.reduce((acc, curr) => acc + curr.value, 0);
+
+  const anosOpcoes = anosDisponiveis && anosDisponiveis.length > 0
+    ? anosDisponiveis
+    : (resumoGastos && resumoGastos.length > 0
+      ? resumoGastos.map(r => r.ano).sort((a, b) => b - a)
+      : [2026, 2025, 2024, 2023]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -165,10 +175,11 @@ export const DespesasTab = ({
             size="small"
             onChange={handleChangeYear}
           >
-            <MenuItem value={2026}>2026</MenuItem>
-            <MenuItem value={2025}>2025</MenuItem>
-            <MenuItem value={2024}>2024</MenuItem>
-            <MenuItem value={2023}>2023</MenuItem>
+            {anosOpcoes.map((anoOpcao) => (
+              <MenuItem key={anoOpcao} value={anoOpcao}>
+                {anoOpcao}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Paper>
@@ -220,48 +231,56 @@ export const DespesasTab = ({
             </CardContent>
           </Card>
         </Grid>
+
         <Grid size={{ xs: 12, lg: 5 }}>
           <Card sx={{ height: '100%', borderRadius: 2, boxShadow: 1 }}>
-            <CardHeader title="Gastos por Categoria" />
+            <CardHeader title="Distribuição por Categoria" />
             <Divider />
-            <CardContent
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                pt: 2,
-                px: { xs: 1.5, sm: 2 },
-              }}
-            >
+            <CardContent sx={{ pt: 2, px: { xs: 2, sm: 3 } }}>
               {datasetCategorias.length > 0 ? (
-                <Box
-                  sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                >
-                  <Box sx={{ width: '100%', height: 260, display: 'flex', justifyContent: 'center' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: 200,
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <PieChart
-                      colors={PIE_COLORS}
                       series={[
                         {
                           data: datasetCategorias,
-                          innerRadius: 45,
-                          outerRadius: 100,
+                          innerRadius: 50,
+                          outerRadius: 85,
                           paddingAngle: 2,
                           cornerRadius: 4,
                         },
                       ]}
-                      height={260}
-                      hideLegend={true}
+                      colors={PIE_COLORS}
+                      height={200}
+                      margin={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      slotProps={{
+                        legend: { hidden: true } as any,
+                      }}
                     />
                   </Box>
 
-                  <Box sx={{ width: '100%', mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 1,
+                      maxHeight: 180,
+                      overflowY: 'auto',
+                      pr: 0.5,
+                    }}
+                  >
                     {datasetCategorias.map((item, index) => {
-                      const cor = PIE_COLORS[index % PIE_COLORS.length];
-                      const porcentagem =
-                        totalGastosAno > 0
-                          ? ((item.value / totalGastosAno) * 100).toFixed(1)
-                          : '0';
+                      const color = PIE_COLORS[index % PIE_COLORS.length];
+                      const porcentagem = totalGastosAno > 0
+                        ? ((item.value / totalGastosAno) * 100).toFixed(1)
+                        : '0';
 
                       return (
                         <Box
@@ -270,30 +289,34 @@ export const DespesasTab = ({
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            gap: 1.5,
-                            py: 0.75,
-                            px: 1.5,
-                            borderRadius: 1.5,
-                            bgcolor: 'action.hover',
+                            p: 0.75,
+                            borderRadius: 1,
+                            '&:hover': { bgcolor: 'action.hover' },
                           }}
                         >
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0, flex: 1 }}>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 1.5,
+                              minWidth: 0,
+                            }}
+                          >
                             <Box
                               sx={{
                                 width: 10,
                                 height: 10,
                                 borderRadius: '50%',
-                                bgcolor: cor,
+                                bgcolor: color,
                                 flexShrink: 0,
                               }}
                             />
                             <Typography
                               variant="body2"
+                              noWrap
                               sx={{
-                                fontWeight: 500,
-                                fontSize: { xs: '0.75rem', sm: '0.825rem' },
-                                lineHeight: 1.25,
-                                wordBreak: 'break-word',
+                                fontSize: { xs: '0.8rem', sm: '0.85rem' },
+                                color: 'text.primary',
                               }}
                             >
                               {item.label}
@@ -337,7 +360,12 @@ export const DespesasTab = ({
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
           Detalhamento da Cota Parlamentar
         </Typography>
-        <DbVisualizarDespesas id={id} resumoGastos={resumoGastos} ano={ano} />
+        <DbVisualizarDespesas
+          id={id}
+          resumoGastos={resumoGastos}
+          ano={ano}
+          legislatura={legislatura}
+        />
       </Box>
     </Box>
   );

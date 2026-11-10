@@ -14,8 +14,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DarkModeOutlined from '@mui/icons-material/DarkModeOutlined';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { Divider, FormControl, Select, Tooltip } from '@mui/material';
 import { useThemeContext } from '../../theme';
-import { Tooltip } from '@mui/material';
+import { useLegislatura } from '@/contexts/legislatura';
+import { LEGISLATURAS_DISPONIVEIS } from '@/utils';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -54,7 +56,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '40ch',
+      width: '32ch',
     },
     [theme.breakpoints.down('sm')]: {
       paddingLeft: `calc(1em + ${theme.spacing(3)})`,
@@ -71,6 +73,7 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
   const [searchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState('');
   const { isDarkMode, toggleTheme } = useThemeContext();
+  const { legislatura, setLegislatura } = useLegislatura();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
@@ -83,7 +86,11 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
   };
 
   const handleNavigate = (path: string) => {
-    navigate(path);
+    if (path === '/deputados' || path === '/comparar') {
+      navigate({ pathname: path, search: `legislatura=${legislatura}` });
+    } else {
+      navigate(path);
+    }
     handleCloseNavMenu();
   };
 
@@ -96,6 +103,7 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
       params.delete('nome');
     }
 
+    params.set('legislatura', String(legislatura));
     params.delete('page');
     navigate({ pathname: '/deputados', search: params.toString() });
   };
@@ -152,6 +160,27 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
               <MenuItem onClick={() => handleNavigate('/comparar')}>
                 <Typography sx={{ textAlign: 'center' }}>Comparar</Typography>
               </MenuItem>
+              <Divider />
+              <Box sx={{ px: 2, py: 1, minWidth: 200 }}>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+                  Legislatura
+                </Typography>
+                <Select
+                  size="small"
+                  fullWidth
+                  value={legislatura}
+                  onChange={(e) => {
+                    setLegislatura(Number(e.target.value));
+                    handleCloseNavMenu();
+                  }}
+                >
+                  {LEGISLATURAS_DISPONIVEIS.map((leg) => (
+                    <MenuItem key={leg.id} value={leg.id}>
+                      {leg.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
             </Menu>
           </Box>
 
@@ -185,8 +214,37 @@ const DbAppBar = ({ sx }: DbAppBarProps) => {
             </Button>
           </Box>
 
+          <FormControl
+            size="small"
+            sx={{
+              display: { xs: 'none', sm: 'flex' },
+              minWidth: 165,
+              mr: 1,
+              '& .MuiOutlinedInput-root': {
+                color: 'inherit',
+                fontSize: '0.85rem',
+                '& fieldset': { borderColor: alpha('#fff', 0.35) },
+                '&:hover fieldset': { borderColor: alpha('#fff', 0.65) },
+                '&.Mui-focused fieldset': { borderColor: '#fff' },
+              },
+              '& .MuiSvgIcon-root': { color: 'inherit' },
+            }}
+          >
+            <Select
+              value={legislatura}
+              onChange={(e) => setLegislatura(Number(e.target.value))}
+              inputProps={{ 'aria-label': 'Legislatura selecionada' }}
+            >
+              {LEGISLATURAS_DISPONIVEIS.map((leg) => (
+                <MenuItem key={leg.id} value={leg.id}>
+                  {leg.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <Tooltip title={isDarkMode ? 'Tema claro' : 'Tema escuro'}>
-            <IconButton sx={{ ml: 1, mr: 1 }} onClick={toggleTheme} color="inherit" aria-label="Alternar tema">
+            <IconButton sx={{ ml: 0.5, mr: 1 }} onClick={toggleTheme} color="inherit" aria-label="Alternar tema">
               {isDarkMode ? <DarkModeOutlined /> : <Brightness7Icon />}
             </IconButton>
           </Tooltip>

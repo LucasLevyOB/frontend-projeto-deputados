@@ -23,9 +23,10 @@ import type { Votacao } from '@/types';
 
 interface Props {
     id: number;
+    legislatura?: number;
 }
 
-const DbVisualizarVotacoes = ({ id }: Props) => {
+const DbVisualizarVotacoes = ({ id, legislatura }: Props) => {
     const [votacoes, setVotacoes] = useState<Votacao[]>([]);
     const [page, setPage] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
@@ -41,7 +42,8 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
             Number(id),
             1,
             20,
-            debouncedEmenta
+            debouncedEmenta,
+            legislatura
         );
         setVotacoes(response.data);
         setPage(1);
@@ -56,7 +58,8 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
             Number(id),
             page,
             20,
-            debouncedEmenta
+            debouncedEmenta,
+            legislatura
         );
         setVotacoes((prev) => [...prev, ...response.data]);
         setHasMore(page < response.totalPages);
@@ -67,7 +70,7 @@ const DbVisualizarVotacoes = ({ id }: Props) => {
         if (id) {
             fetchInitialData();
         }
-    }, [id, debouncedEmenta]);
+    }, [id, debouncedEmenta, legislatura]);
 
     useEffect(() => {
         if (id && page > 1) {

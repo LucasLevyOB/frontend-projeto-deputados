@@ -67,6 +67,7 @@ export interface Deputado {
     };
     escolaridade: string | null;
     urlRedeSocial: string[] | null;
+    legislaturasDisponiveis?: number[];
 }
 
 export interface DeputadoResumo {

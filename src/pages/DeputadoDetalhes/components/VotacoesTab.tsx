@@ -3,12 +3,13 @@ import { DbVisualizarVotacoes } from '@/components/DbVisualizarVotacoes';
 
 interface VotacoesTabProps {
   id: number;
+  legislatura?: number;
 }
 
-export const VotacoesTab = ({ id }: VotacoesTabProps) => {
+export const VotacoesTab = ({ id, legislatura }: VotacoesTabProps) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <DbVisualizarVotacoes id={id} />
+      <DbVisualizarVotacoes id={id} legislatura={legislatura} />
     </Box>
   );
 };

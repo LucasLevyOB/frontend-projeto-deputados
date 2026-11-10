@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useLegislatura } from '@/contexts/legislatura';
 import { VirtualListbox, VirtualListboxContext } from './VirtualListbox';
 import type { DeputadoResumo } from '@/types';
 
@@ -23,6 +24,7 @@ export const DeputadoAutocomplete = ({
   loading = false,
   placeholder = 'Buscar Deputado',
 }: DeputadoAutocompleteProps) => {
+  const { legislatura } = useLegislatura();
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<DeputadoResumo[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -43,7 +45,10 @@ export const DeputadoAutocomplete = ({
       const response = await api.buscarDeputados(
         debouncedInput.trim() || undefined,
         proximaPagina,
-        10
+        10,
+        undefined,
+        undefined,
+        legislatura
       );
 
       setOptions((prev) => {
@@ -61,7 +66,7 @@ export const DeputadoAutocomplete = ({
     } finally {
       setFetchingMore(false);
     }
-  }, [fetchingOptions, fetchingMore, hasMore, page, debouncedInput]);
+  }, [fetchingOptions, fetchingMore, hasMore, page, debouncedInput, legislatura]);
 
   useEffect(() => {
     let ativo = true;
@@ -73,7 +78,10 @@ export const DeputadoAutocomplete = ({
         const response = await api.buscarDeputados(
           debouncedInput.trim() || undefined,
           1,
-          10
+          10,
+          undefined,
+          undefined,
+          legislatura
         );
 
         if (ativo) {
@@ -97,7 +105,7 @@ export const DeputadoAutocomplete = ({
     return () => {
       ativo = false;
     };
-  }, [debouncedInput, open]);
+  }, [debouncedInput, open, legislatura]);
 
   return (
     <VirtualListboxContext.Provider value={{ onLoadMore: carregarMais }}>

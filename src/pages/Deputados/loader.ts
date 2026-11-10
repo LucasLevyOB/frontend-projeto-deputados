@@ -1,4 +1,5 @@
 import DepudadosAPI from "@/services/DepudadosAPI";
+import { resolveLegislaturaFromRequest } from "@/utils/legislatura";
 
 import type { LoaderFunctionArgs } from "react-router";
 
@@ -9,9 +10,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const uf = url.searchParams.get('uf') || undefined;
     const siglaPartido = url.searchParams.get('siglaPartido') || undefined;
     const nome = url.searchParams.get('nome') || undefined;
+    const legislatura = resolveLegislaturaFromRequest(request);
 
     const api = new DepudadosAPI();
-    const pagination = await api.getDeputados(page, 20, uf, siglaPartido, nome);
+    const pagination = await api.getDeputados(page, 20, uf, siglaPartido, nome, legislatura);
 
     return {
         pagination,
@@ -20,6 +22,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             uf: uf || '',
             siglaPartido: siglaPartido || '',
             nome: nome || '',
+            legislatura,
         },
     };
 };

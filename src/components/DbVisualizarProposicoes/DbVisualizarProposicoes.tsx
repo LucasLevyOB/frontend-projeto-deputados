@@ -30,9 +30,10 @@ interface Props {
     id: number;
     resumoProposicoes?: ResumoProposicoes[];
     ano?: number;
+    legislatura?: number;
 }
 
-const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
+const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano, legislatura }: Props) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -54,7 +55,8 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
             20,
             siglaTipo,
             debouncedEmenta,
-            ano
+            ano,
+            legislatura
         );
         setProposicoes(response.data);
         setPage(1);
@@ -71,7 +73,8 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
             20,
             siglaTipo,
             debouncedEmenta,
-            ano
+            ano,
+            legislatura
         );
         setProposicoes((prev) => [...prev, ...response.data]);
         setHasMore(page < response.totalPages);
@@ -87,7 +90,7 @@ const DbVisualizarProposicoes = ({ id, resumoProposicoes, ano }: Props) => {
         if (id) {
             fetchInitialData();
         }
-    }, [id, siglaTipo, debouncedEmenta, ano]);
+    }, [id, siglaTipo, debouncedEmenta, ano, legislatura]);
 
     useEffect(() => {
         if (id && page > 1) {

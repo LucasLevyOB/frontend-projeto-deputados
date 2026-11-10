@@ -1,5 +1,5 @@
-import { useState, type Dispatch, type SetStateAction } from 'react';
-import { Box, Typography } from '@mui/material';
+import { useState, useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem, type SelectChangeEvent } from '@mui/material';
 import { DbEmptyState } from '@/components/DbEmptyState';
 import DepudadosAPI from '@/services/DepudadosAPI';
 import { DeputadoSelectorCard } from './components/DeputadoSelectorCard';
@@ -7,33 +7,54 @@ import { ComparacaoGeral } from './components/ComparacaoGeral';
 import { ComparacaoGastos } from './components/ComparacaoGastos';
 import { ComparacaoTemas } from './components/ComparacaoTemas';
 import { ComparacaoVotacoes } from './components/ComparacaoVotacoes';
+import { useLegislatura } from '@/contexts/legislatura';
+import { LEGISLATURAS_DISPONIVEIS, getLegislaturaLabel } from '@/utils';
 import type { Deputado, DeputadoResumo } from '@/types';
 
 export const ComparacaoDeputados = () => {
+  const { legislatura, setLegislatura } = useLegislatura();
   const [deputado1, setDeputado1] = useState<Deputado | null>(null);
   const [deputado2, setDeputado2] = useState<Deputado | null>(null);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const ultimaLegislaturaRef = useRef(legislatura);
 
   const carregarDetalhesDeputado = async (
-    deputadoBasico: DeputadoResumo,
+    deputadoBasico: Pick<DeputadoResumo, '_id'>,
     setDeputado: Dispatch<SetStateAction<Deputado | null>>,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    leg: number = legislatura
   ) => {
     setLoading(true);
     try {
       const api = new DepudadosAPI();
-      const resposta = await api.getDeputado(deputadoBasico._id);
+      const resposta = await api.getDeputado(deputadoBasico._id, leg);
       if (Array.isArray(resposta) && resposta.length > 0) {
         setDeputado(resposta[0]);
-      } else if (resposta && typeof resposta === 'object') {
-        setDeputado(resposta as Deputado);
+      } else if (resposta && !Array.isArray(resposta)) {
+        setDeputado(resposta as unknown as Deputado);
       }
     } catch (error) {
       console.error('Erro ao carregar detalhes completos do deputado:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (ultimaLegislaturaRef.current === legislatura) return;
+    ultimaLegislaturaRef.current = legislatura;
+
+    if (deputado1) {
+      carregarDetalhesDeputado(deputado1, setDeputado1, setLoading1, legislatura);
+    }
+    if (deputado2) {
+      carregarDetalhesDeputado(deputado2, setDeputado2, setLoading2, legislatura);
+    }
+  }, [legislatura]);
+
+  const handleChangeLegislatura = (event: SelectChangeEvent<number>) => {
+    setLegislatura(Number(event.target.value));
   };
 
   const handleSelectDeputado1 = (dep: DeputadoResumo) => {
@@ -67,18 +88,45 @@ export const ComparacaoDeputados = () => {
         py: 4,
       }}
     >
-      <Typography
-        variant="h5"
-        component="h1"
+      <Box
         sx={{
-          fontWeight: 'bold',
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
           mb: 4,
-          textAlign: 'center',
-          letterSpacing: '-0.3px',
+          gap: 2,
         }}
       >
-        Comparação de Deputados (2023-2026)
-      </Typography>
+        <Typography
+          variant="h5"
+          component="h1"
+          sx={{
+            fontWeight: 'bold',
+            textAlign: { xs: 'center', sm: 'left' },
+            letterSpacing: '-0.3px',
+          }}
+        >
+          Comparação de Deputados ({getLegislaturaLabel(legislatura)})
+        </Typography>
+
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel id="select-legislatura-comparar-label">Legislatura</InputLabel>
+          <Select
+            labelId="select-legislatura-comparar-label"
+            value={legislatura}
+            label="Legislatura"
+            onChange={handleChangeLegislatura}
+          >
+            {LEGISLATURAS_DISPONIVEIS.map((leg) => (
+              <MenuItem key={leg.id} value={leg.id}>
+                {leg.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
 
       <Box
         sx={{
@@ -128,7 +176,11 @@ export const ComparacaoDeputados = () => {
           <ComparacaoGeral deputado1={deputado1} deputado2={deputado2} />
           <ComparacaoGastos deputado1={deputado1} deputado2={deputado2} />
           <ComparacaoTemas deputado1={deputado1} deputado2={deputado2} />
-          <ComparacaoVotacoes deputado1={deputado1} deputado2={deputado2} />
+          <ComparacaoVotacoes
+            deputado1={deputado1}
+            deputado2={deputado2}
+            legislatura={legislatura}
+          />
         </Box>
       )}
     </Box>

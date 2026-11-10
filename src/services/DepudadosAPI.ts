@@ -16,7 +16,8 @@ export default class DepudadosAPI {
     limit: number = 20,
     uf?: string,
     siglaPartido?: string,
-    nome?: string
+    nome?: string,
+    legislatura?: number
   ): Promise<PagedResponse<Deputado>> => {
     try {
       const params = new URLSearchParams({
@@ -26,6 +27,7 @@ export default class DepudadosAPI {
       if (uf) params.append('uf', uf);
       if (siglaPartido) params.append('siglaPartido', siglaPartido);
       if (nome) params.append('nome', nome);
+      if (legislatura) params.append('legislatura', legislatura.toString());
 
       const response = await this.request.get(
         `/deputados?${params.toString()}`
@@ -48,7 +50,8 @@ export default class DepudadosAPI {
     page: number = 1,
     limit: number = 10,
     uf?: string,
-    siglaPartido?: string
+    siglaPartido?: string,
+    legislatura?: number
   ): Promise<PagedResponse<DeputadoResumo>> => {
     try {
       const params = new URLSearchParams({
@@ -58,6 +61,7 @@ export default class DepudadosAPI {
       if (nome) params.append('nome', nome);
       if (uf) params.append('uf', uf);
       if (siglaPartido) params.append('siglaPartido', siglaPartido);
+      if (legislatura) params.append('legislatura', legislatura.toString());
 
       const response = await this.request.get(
         `/deputados/busca?${params.toString()}`
@@ -75,8 +79,9 @@ export default class DepudadosAPI {
     }
   };
 
-  public getDeputado = async (id: number) => {
-    const response = await this.request.get(`/deputados/${id}`);
+  public getDeputado = async (id: number, legislatura?: number): Promise<Deputado[]> => {
+    const params = legislatura ? `?legislatura=${legislatura}` : '';
+    const response = await this.request.get(`/deputados/${id}${params}`);
     return response.data;
   };
 
@@ -85,7 +90,8 @@ export default class DepudadosAPI {
     page: number = 1,
     limit: number = 20,
     ano?: number,
-    descricao?: string
+    descricao?: string,
+    legislatura?: number
   ): Promise<PagedResponse<Despesa>> => {
     try {
       const params = new URLSearchParams({
@@ -99,6 +105,10 @@ export default class DepudadosAPI {
 
       if (descricao) {
         params.append('descricao', descricao);
+      }
+
+      if (legislatura) {
+        params.append('legislatura', legislatura.toString());
       }
 
       const response = await this.request.get(
@@ -123,7 +133,8 @@ export default class DepudadosAPI {
     limit: number = 20,
     siglaTipo?: string,
     ementa?: string,
-    ano?: number
+    ano?: number,
+    legislatura?: number
   ): Promise<PagedResponse<Proposicao>> => {
     try {
       const params = new URLSearchParams({
@@ -141,6 +152,10 @@ export default class DepudadosAPI {
 
       if (ano) {
         params.append('ano', ano.toString());
+      }
+
+      if (legislatura) {
+        params.append('legislatura', legislatura.toString());
       }
 
       const response = await this.request.get(
@@ -163,7 +178,8 @@ export default class DepudadosAPI {
     id: number,
     page: number = 1,
     limit: number = 20,
-    ementa?: string
+    ementa?: string,
+    legislatura?: number
   ): Promise<PagedResponse<Votacao>> => {
     try {
       const params = new URLSearchParams({
@@ -173,6 +189,10 @@ export default class DepudadosAPI {
 
       if (ementa) {
         params.append('ementa', ementa);
+      }
+
+      if (legislatura) {
+        params.append('legislatura', legislatura.toString());
       }
 
       const response = await this.request.get(
@@ -196,7 +216,8 @@ export default class DepudadosAPI {
     idDeputado2?: number | string,
     page: number = 1,
     limit: number = 5,
-    ementa?: string
+    ementa?: string,
+    legislatura?: number
   ): Promise<PagedResponse<VotacaoComparadaItem>> => {
     try {
       const params = new URLSearchParams({
@@ -212,6 +233,9 @@ export default class DepudadosAPI {
       }
       if (ementa) {
         params.append('ementa', ementa);
+      }
+      if (legislatura) {
+        params.append('legislatura', legislatura.toString());
       }
 
       const response = await this.request.get(

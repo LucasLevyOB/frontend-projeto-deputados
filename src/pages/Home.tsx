@@ -7,13 +7,15 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ShieldIcon from '@mui/icons-material/Shield';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { useLegislatura } from '@/contexts/legislatura';
 
 export const Home = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { legislatura } = useLegislatura();
 
   const handleExploreClick = () => {
-    navigate('/deputados');
+    navigate({ pathname: '/deputados', search: `legislatura=${legislatura}` });
   };
 
   const features = [

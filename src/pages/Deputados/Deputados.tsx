@@ -7,6 +7,7 @@ import {
 import { DbCardDeputado } from '@/components/DbCardDeputado';
 import { DbFiltragemDeputados } from '@/components/DbFiltragemDeputados';
 import DbEmptyState from '@/components/DbEmptyState/DbEmptyState';
+import { useLegislatura } from '@/contexts/legislatura';
 
 import type { loader } from './loader';
 
@@ -18,7 +19,10 @@ export const Deputados = () => {
   const { pagination, filters } = useLoaderData<typeof loader>();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
+  const { legislatura, setLegislatura } = useLegislatura();
   const isCarregando = navigation.state === 'loading';
+
+  const legislaturaAtiva = filters.legislatura ?? legislatura;
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, newPage: number) => {
     const params = new URLSearchParams(searchParams);
@@ -27,6 +31,11 @@ export const Deputados = () => {
   };
 
   const handleFilterChange = (filterName: string, value: string | null) => {
+    if (filterName === 'legislatura' && value) {
+      setLegislatura(Number(value));
+      return;
+    }
+
     const params = new URLSearchParams(searchParams);
     if (value) {
       params.set(filterName, value);
@@ -70,6 +79,7 @@ export const Deputados = () => {
         <DbFiltragemDeputados
           uf={filters.uf}
           partido={filters.siglaPartido}
+          legislatura={legislaturaAtiva}
           handleFilterChange={handleFilterChange}
         />
       </Box>
@@ -78,7 +88,7 @@ export const Deputados = () => {
         <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <DbEmptyState
             title="Nenhum deputado encontrado"
-            description="Tente ajustar os filtros de busca (nome, estado ou partido) para encontrar o parlamentar desejado."
+            description="Tente ajustar os filtros de busca (nome, estado, partido ou legislatura) para encontrar o parlamentar desejado."
           />
         </Box>
       ) : (
@@ -108,7 +118,7 @@ export const Deputados = () => {
                 size={{ xs: 12, sm: 6, md: 6, lg: 4, xl: 3 }}
                 sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
               >
-                <DbCardDeputado deputado={deputado} />
+                <DbCardDeputado deputado={deputado} legislatura={legislaturaAtiva} />
               </Grid>
             ))}
           </Grid>

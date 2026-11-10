@@ -17,12 +17,14 @@ interface ComparacaoVotacoesProps {
   deputado1: Deputado | null;
   deputado2: Deputado | null;
   votacoesIniciais?: VotacaoComparadaItem[];
+  legislatura?: number;
 }
 
 export const ComparacaoVotacoes = ({
   deputado1,
   deputado2,
   votacoesIniciais,
+  legislatura,
 }: ComparacaoVotacoesProps) => {
   const [votacoes, setVotacoes] = useState<VotacaoComparadaItem[]>(votacoesIniciais || []);
   const [loading, setLoading] = useState(false);
@@ -42,7 +44,7 @@ export const ComparacaoVotacoes = ({
     setLoading(true);
     try {
       const api = new DepudadosAPI();
-      const resposta = await api.getVotacoesComparadas(id1, id2, page, 5);
+      const resposta = await api.getVotacoesComparadas(id1, id2, page, 5, undefined, legislatura);
       setVotacoes(resposta.data || []);
       setTotalPaginas(resposta.totalPages || 0);
     } catch (error) {
@@ -56,7 +58,7 @@ export const ComparacaoVotacoes = ({
   useEffect(() => {
     setPagina(1);
     carregarVotacoes(1);
-  }, [deputado1?._id, deputado2?._id]);
+  }, [deputado1?._id, deputado2?._id, legislatura]);
 
   const handleMudarPagina = (_: React.ChangeEvent<unknown>, novaPagina: number) => {
     setPagina(novaPagina);

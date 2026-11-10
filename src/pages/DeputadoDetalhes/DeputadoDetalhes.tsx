@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -8,6 +8,11 @@ import {
   Avatar,
   Chip,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Alert,
 } from '@mui/material';
 import {
   Link,
@@ -19,6 +24,8 @@ import { DespesasTab } from './components/DespesasTab';
 import { ProposicoesTab } from './components/ProposicoesTab';
 import { VotacoesTab } from './components/VotacoesTab';
 import { CustomTabPanel } from './components/CustomTabPanel';
+import { useLegislatura } from '@/contexts/legislatura';
+import { getAnosByLegislatura, getLegislaturaLabel, LEGISLATURAS_DISPONIVEIS } from '@/utils';
 
 import type { SelectChangeEvent } from '@mui/material';
 import type { loader } from './loader';
@@ -33,17 +40,41 @@ const a11yProps = (index: number) => ({
 });
 
 const DeputadoDetalhes = () => {
-  const { deputado } = useLoaderData<typeof loader>();
-  const [ano, setAno] = useState<number>(new Date().getFullYear());
+  const { deputado, legislatura: legislaturaLoader } = useLoaderData<typeof loader>();
+  const { legislatura: legislaturaContext, setLegislatura } = useLegislatura();
+  const legislaturaAtiva = legislaturaLoader ?? legislaturaContext;
+
+  const anosLegislatura = getAnosByLegislatura(legislaturaAtiva).sort((a, b) => b - a);
+
+  const [ano, setAno] = useState<number>(anosLegislatura[0]);
   const [tabValue, setTabValue] = useState(0);
+
+  useEffect(() => {
+    setAno(anosLegislatura[0]);
+  }, [legislaturaAtiva]);
 
   const handleChangeYear = (event: SelectChangeEvent<number>) => {
     setAno(Number(event.target.value));
   };
 
+  const handleChangeLegislatura = (event: SelectChangeEvent<number>) => {
+    setLegislatura(Number(event.target.value));
+  };
+
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
+  const legislaturasOpcoes = Array.from(new Set([
+    ...(deputado.legislaturasDisponiveis ?? []),
+    ...LEGISLATURAS_DISPONIVEIS.map(l => l.id),
+    legislaturaAtiva
+  ])).sort((a, b) => b - a);
+
+  const possuiMandatoNaLegislatura =
+    !deputado.legislaturasDisponiveis ||
+    deputado.legislaturasDisponiveis.length === 0 ||
+    deputado.legislaturasDisponiveis.includes(legislaturaAtiva);
 
   return (
     <Box
@@ -58,17 +89,51 @@ const DeputadoDetalhes = () => {
         mb: 8,
       }}
     >
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start', mb: -1 }}>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: -1 }}>
         <Button
           startIcon={<ArrowBackIcon />}
           component={Link}
-          to='/deputados'
+          to={`/deputados?legislatura=${legislaturaAtiva}`}
           color="inherit"
           variant="text"
         >
           Voltar
         </Button>
+        <FormControl size="small" sx={{ minWidth: 190 }}>
+          <InputLabel id="select-legislatura-detalhes-label">Legislatura</InputLabel>
+          <Select
+            labelId="select-legislatura-detalhes-label"
+            value={legislaturaAtiva}
+            label="Legislatura"
+            onChange={handleChangeLegislatura}
+          >
+            {legislaturasOpcoes.map((legId) => (
+              <MenuItem key={legId} value={legId}>
+                {getLegislaturaLabel(legId)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
+
+      {!possuiMandatoNaLegislatura && deputado.legislaturasDisponiveis && (
+        <Alert
+          severity="warning"
+          sx={{ width: '100%', borderRadius: 2 }}
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => setLegislatura(deputado.legislaturasDisponiveis![0])}
+            >
+              Ver {deputado.legislaturasDisponiveis[0]}ª Legislatura
+            </Button>
+          }
+        >
+          Este parlamentar não possui registro de mandato na{' '}
+          <strong>{getLegislaturaLabel(legislaturaAtiva)}</strong>.
+        </Alert>
+      )}
 
       <Paper
         variant='outlined'
@@ -125,6 +190,12 @@ const DeputadoDetalhes = () => {
               <Chip
                 label={`${deputado.siglaPartido} - ${deputado.siglaUf}`}
                 color="primary"
+                variant="outlined"
+                sx={{ fontWeight: 'bold' }}
+              />
+              <Chip
+                label={getLegislaturaLabel(legislaturaAtiva)}
+                color="secondary"
                 variant="outlined"
                 sx={{ fontWeight: 'bold' }}
               />
@@ -187,6 +258,8 @@ const DeputadoDetalhes = () => {
             ano={ano}
             resumoGastos={deputado.resumoGastos}
             handleChangeYear={handleChangeYear}
+            anosDisponiveis={anosLegislatura}
+            legislatura={legislaturaAtiva}
           />
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={2}>
@@ -195,10 +268,12 @@ const DeputadoDetalhes = () => {
             ano={ano}
             resumoProposicoes={deputado.resumoProposicoes}
             handleChangeYear={handleChangeYear}
+            anosDisponiveis={anosLegislatura}
+            legislatura={legislaturaAtiva}
           />
         </CustomTabPanel>
         <CustomTabPanel value={tabValue} index={3}>
-          <VotacoesTab id={deputado._id} />
+          <VotacoesTab id={deputado._id} legislatura={legislaturaAtiva} />
         </CustomTabPanel>
       </Box>
     </Box>

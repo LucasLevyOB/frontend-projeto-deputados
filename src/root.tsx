@@ -1,6 +1,7 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { LinksFunction, MetaFunction, HeadersFunction } from 'react-router';
 import { AppThemeProvider } from '@/theme';
+import { LegislaturaProvider } from '@/contexts/legislatura';
 
 export const headers: HeadersFunction = () => ({
   'Cache-Control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
@@ -45,7 +46,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => (
 
 const Root = () => (
   <AppThemeProvider>
-    <Outlet />
+    <LegislaturaProvider>
+      <Outlet />
+    </LegislaturaProvider>
   </AppThemeProvider>
 );
 

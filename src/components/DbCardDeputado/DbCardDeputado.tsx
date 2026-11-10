@@ -10,9 +10,12 @@ import type { Deputado } from '@/types';
 
 interface Props {
     deputado: Deputado;
+    legislatura?: number;
 }
 
-const DbCard = ({ deputado }: Props) => {
+const DbCard = ({ deputado, legislatura }: Props) => {
+    const destino = legislatura ? `/deputado/${deputado._id}?legislatura=${legislatura}` : `/deputado/${deputado._id}`;
+
     return (
         <Card
             sx={{
@@ -27,7 +30,7 @@ const DbCard = ({ deputado }: Props) => {
         >
             <CardActionArea
                 component={Link}
-                to={`/deputado/${deputado._id}`}
+                to={destino}
                 sx={{
                     height: '100%',
                     textDecoration: 'none',

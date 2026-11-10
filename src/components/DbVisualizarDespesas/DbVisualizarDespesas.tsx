@@ -26,9 +26,10 @@ interface Props {
     id: number;
     resumoGastos?: ResumoGastos[];
     ano?: number;
+    legislatura?: number;
 }
 
-const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
+const DbVisualizarDespesas = ({ id, resumoGastos, ano, legislatura }: Props) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -47,7 +48,8 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
             pageDespesas,
             20,
             ano,
-            descricao
+            descricao,
+            legislatura
         );
         setDespesas(response.data);
         setHasMoreDespesas(pageDespesas < response.totalPages);
@@ -62,7 +64,8 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
             pageDespesas,
             20,
             ano,
-            descricao
+            descricao,
+            legislatura
         );
         setDespesas((prevDespesas) => [...prevDespesas, ...response.data]);
         setHasMoreDespesas(pageDespesas < response.totalPages);
@@ -78,7 +81,7 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
         if (id) {
             fetchDespesasData();
         }
-    }, [id, descricao, ano]);
+    }, [id, descricao, ano, legislatura]);
 
     useEffect(() => {
         if (id && pageDespesas > 1) {
@@ -226,7 +229,7 @@ const DbVisualizarDespesas = ({ id, resumoGastos, ano }: Props) => {
                                         }
                                     />
                                 </ListItem>
-                                {index < despesas.length - 1 && <Divider />}
+                                <Divider />
                             </Box>
                         );
                     })}
